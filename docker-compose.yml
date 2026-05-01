@@ -1,6 +1,12 @@
 # laSalle Health Center — stack completo
 # Arranque: docker compose up -d --build
 # Airflow UI: http://localhost:8081  (admin / Admin123.)
+#
+# macOS (Docker Desktop): si aparece "mount callback failed", los contenedores
+# quedan en Created. Recuperación:
+#   docker compose start
+#   docker compose up -d dashboard
+# El dashboard espera a que la API esté healthy para reducir creaciones en paralelo.
 
 x-airflow-common: &airflow-common
   image: apache/airflow:2.10.4-python3.11
@@ -160,6 +166,16 @@ services:
         condition: service_healthy
       minio:
         condition: service_started
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'python -c "import urllib.request; urllib.request.urlopen(''http://127.0.0.1:8000/health'')"',
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
     networks:
       - salle-net
 
@@ -194,7 +210,8 @@ services:
     environment:
       API_URL: http://api:8000
     depends_on:
-      - api
+      api:
+        condition: service_healthy
     networks:
       - salle-net
 
