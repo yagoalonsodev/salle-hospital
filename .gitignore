@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+
+# Datos y artefactos
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+*.pth
+*.pt
+*.ckpt
+ml/models/*
+!ml/models/.gitkeep
+
+# Spark / logs
+pipeline/spark-warehouse/
+pipeline/metastore_db/
+*.log
+
+# IDE y OS
+.idea/
+.vscode/
+.DS_Store
+
+# MinIO local (si se monta fuera de volumen nombrado)
+.minio/
