@@ -29,3 +29,8 @@ pipeline/metastore_db/
 
 # MinIO local (si se monta fuera de volumen nombrado)
 .minio/
+
+# Airflow
+airflow/logs/*
+!airflow/logs/.gitkeep
+airflow/airflow.db

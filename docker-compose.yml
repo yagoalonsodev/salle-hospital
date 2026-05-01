@@ -1,6 +1,36 @@
-# laSalle Health Center — infraestructura base (día 1)
-# Levantar: docker compose up -d
-# Los servicios api, ml, dashboard y pipeline se completan en iteraciones posteriores.
+# laSalle Health Center — stack completo
+# Arranque: docker compose up -d --build
+# Airflow UI: http://localhost:8081  (admin / Admin123.)
+
+x-airflow-common: &airflow-common
+  image: apache/airflow:2.10.4-python3.11
+  environment: &airflow-common-env
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${AIRFLOW_DB_USER:-airflow}:${AIRFLOW_DB_PASSWORD:-airflow_secret}@postgres:5432/${AIRFLOW_DB_NAME:-airflow}
+    AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
+    AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "false"
+    _AIRFLOW_WWW_USER_USERNAME: ${AIRFLOW_ADMIN_USER:-admin}
+    _AIRFLOW_WWW_USER_PASSWORD: ${AIRFLOW_ADMIN_PASSWORD:-Admin123.}
+    _AIRFLOW_WWW_USER_FIRSTNAME: Admin
+    _AIRFLOW_WWW_USER_LASTNAME: laSalle
+    _AIRFLOW_WWW_USER_EMAIL: admin@lasalle.local
+    SPARK_MASTER_URL: spark://spark-master:7077
+    DATABASE_URL: postgresql://${POSTGRES_USER:-salle}:${POSTGRES_PASSWORD:-salle_secret}@postgres:5432/${POSTGRES_DB:-salle_hospital}
+    ML_SERVICE_URL: http://ml:8001
+    API_URL: http://api:8000
+    MINIO_ENDPOINT: minio:9000
+    MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+    MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+    MINIO_BUCKET: ${MINIO_BUCKET:-xray-images}
+  volumes:
+    - ./airflow/dags:/opt/airflow/dags
+    - ./airflow/logs:/opt/airflow/logs
+    - ./airflow/plugins:/opt/airflow/plugins
+    - ./data:/opt/data
+    - ./pipeline:/opt/pipeline
+  networks:
+    - salle-net
 
 services:
   postgres:
@@ -14,8 +44,13 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./infra/postgres/init-airflow-db.sql:/docker-entrypoint-initdb.d/02-init-airflow-db.sql:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-salle} -d ${POSTGRES_DB:-salle_hospital}"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-salle} -d ${POSTGRES_DB:-salle_hospital}",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -34,24 +69,35 @@ services:
       - "9001:9001"
     volumes:
       - minio_data:/data
-    healthcheck:
-      test: ["CMD", "mc", "ready", "local"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
+    networks:
+      - salle-net
+
+  minio-init:
+    image: minio/mc:latest
+    container_name: salle-minio-init
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      until mc alias set local http://minio:9000 $$MINIO_ROOT_USER $$MINIO_ROOT_PASSWORD; do sleep 2; done;
+      mc mb -p local/$${MINIO_BUCKET} || true;
+      exit 0;
+      "
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+      MINIO_BUCKET: ${MINIO_BUCKET:-xray-images}
     networks:
       - salle-net
 
   spark-master:
-    image: bitnami/spark:3.5
+    image: apache/spark:3.5.3
     container_name: salle-spark-master
+    user: root
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
     environment:
-      - SPARK_MODE=master
-      - SPARK_RPC_AUTHENTICATION_ENABLED=no
-      - SPARK_RPC_ENCRYPTION_ENABLED=no
-      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
-      - SPARK_SSL_ENABLED=no
+      SPARK_MASTER_HOST: spark-master
+      SPARK_MASTER_PORT: 7077
     ports:
       - "8080:8080"
       - "7077:7077"
@@ -62,17 +108,13 @@ services:
       - salle-net
 
   spark-worker:
-    image: bitnami/spark:3.5
+    image: apache/spark:3.5.3
     container_name: salle-spark-worker
+    user: root
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
     environment:
-      - SPARK_MODE=worker
-      - SPARK_MASTER_URL=spark://spark-master:7077
-      - SPARK_WORKER_MEMORY=2G
-      - SPARK_WORKER_CORES=2
-      - SPARK_RPC_AUTHENTICATION_ENABLED=no
-      - SPARK_RPC_ENCRYPTION_ENABLED=no
-      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
-      - SPARK_SSL_ENABLED=no
+      SPARK_WORKER_MEMORY: 2G
+      SPARK_WORKER_CORES: 2
     depends_on:
       - spark-master
     volumes:
@@ -80,6 +122,26 @@ services:
       - ./pipeline:/opt/pipeline
     networks:
       - salle-net
+
+  airflow:
+    <<: *airflow-common
+    container_name: salle-airflow
+    command: standalone
+    ports:
+      - "8081:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      spark-master:
+        condition: service_started
+      minio:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
 
   api:
     build:
@@ -89,16 +151,17 @@ services:
     ports:
       - "8000:8000"
     environment:
-      DATABASE_URL: ${DATABASE_URL:-postgresql://salle:salle_secret@postgres:5432/salle_hospital}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-salle}:${POSTGRES_PASSWORD:-salle_secret}@postgres:5432/${POSTGRES_DB:-salle_hospital}
       ML_SERVICE_URL: ${ML_SERVICE_URL:-http://ml:8001}
       MINIO_ENDPOINT: minio:9000
+      MINIO_BUCKET: ${MINIO_BUCKET:-xray-images}
     depends_on:
       postgres:
         condition: service_healthy
+      minio:
+        condition: service_started
     networks:
       - salle-net
-    profiles:
-      - app
 
   ml:
     build:
@@ -110,14 +173,16 @@ services:
     environment:
       MINIO_ENDPOINT: minio:9000
       MINIO_BUCKET: ${MINIO_BUCKET:-xray-images}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-salle}:${POSTGRES_PASSWORD:-salle_secret}@postgres:5432/${POSTGRES_DB:-salle_hospital}
     depends_on:
-      - minio
+      minio:
+        condition: service_started
+      postgres:
+        condition: service_healthy
     volumes:
       - ./ml/models:/app/models
     networks:
       - salle-net
-    profiles:
-      - app
 
   dashboard:
     build:
@@ -132,8 +197,6 @@ services:
       - api
     networks:
       - salle-net
-    profiles:
-      - app
 
   pipeline:
     build:
@@ -142,7 +205,9 @@ services:
     container_name: salle-pipeline
     environment:
       SPARK_MASTER_URL: ${SPARK_MASTER_URL:-spark://spark-master:7077}
-      DATABASE_URL: ${DATABASE_URL:-postgresql://salle:salle_secret@postgres:5432/salle_hospital}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-salle}:${POSTGRES_PASSWORD:-salle_secret}@postgres:5432/${POSTGRES_DB:-salle_hospital}
+      MINIO_ENDPOINT: minio:9000
+      MINIO_BUCKET: ${MINIO_BUCKET:-xray-images}
     depends_on:
       - spark-master
       - postgres
@@ -151,8 +216,6 @@ services:
       - ./pipeline:/opt/pipeline
     networks:
       - salle-net
-    profiles:
-      - app
 
 volumes:
   postgres_data:
