@@ -1,6 +1,6 @@
 # Backlog — salle-hospital
 
-Última actualización: 2026-05-16
+Última actualización: 2026-05-02
 
 Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 
@@ -20,6 +20,8 @@ Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 | D1-08 | Skills Cursor: Diario IA + SDD | — | `.cursor/skills/` |
 | D2-02 | Datos de ejemplo: RX en `raw/`, CSV clínico, manifest | [pipeline-datos-ejemplo.md](pipeline-datos-ejemplo.md) | 6432 JPG; `scripts/build_clinical_data.py` |
 | D2-01 | Esquema PostgreSQL (pacientes, estudios, predicciones, pipeline) | [pipeline-esquema-db.md](pipeline-esquema-db.md) | `01-init-salle-schema.sql`, `docs/database-architecture.md` |
+| D2-04 | Carga automática imágenes → MinIO | [pipeline-ingesta-imagenes-calidad.md](pipeline-ingesta-imagenes-calidad.md) | `jobs/ingest_validate_images.py` |
+| D2-05 | Validación y deduplicación (calidad) | [pipeline-ingesta-imagenes-calidad.md](pipeline-ingesta-imagenes-calidad.md) | Parquet validated/rejected + Postgres |
 
 ---
 
@@ -38,8 +40,6 @@ Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 | ID | Tarea | Prioridad | Spec |
 |----|-------|-----------|------|
 | D2-03 | Job PySpark: ingesta CSV → Postgres | Alta | `pipeline-ingesta-csv.md` |
-| D2-04 | Job PySpark: carga imágenes → MinIO + metadatos | Alta | `pipeline-ingesta-imagenes.md` |
-| D2-05 | Validación calidad (incompletos, duplicados, corruptos) | Alta | `pipeline-calidad-datos.md` |
 
 ### Día 4–5 · ML (TensorFlow)
 
