@@ -76,6 +76,20 @@ Ver `docs/diario-ia/entradas/2026-05-01.md` como referencia de formato.
 | 2026-05-02 CSV | [sessions/2026-05-02-sin-patients-csv.md](sessions/2026-05-02-sin-patients-csv.md) (`77607d0`) |
 | 2026-05-02 pipeline | [sessions/2026-05-02-ingesta-imagenes.md](sessions/2026-05-02-ingesta-imagenes.md) |
 | 2026-05-02 verificación | [sessions/2026-05-02-verificacion-integracion.md](sessions/2026-05-02-verificacion-integracion.md) |
+| 2026-05-02 automatización | [sessions/2026-05-02-watcher-airflow.md](sessions/2026-05-02-watcher-airflow.md) |
+
+## Automatización (watcher + Airflow)
+
+| Recurso | Ruta |
+|---------|------|
+| Spec SDD | `docs/specs/airflow-automatizacion-watcher.md` |
+| Watcher | `scripts/image_watcher.py`, contenedor `salle-watcher` |
+| DAG | `airflow/dags/salle_rx_pipeline.py` |
+| Guía | `airflow/README.md` |
+
+**MinIO:** `MAX_UPLOAD=0` — ingesta completa a MinIO (todas las válidas). No usar límites de prueba en entregables.
+
+Al documentar en diario: prompt, prueba con imagen en `incoming/`, resultado del DAG y `verify_pipeline_integration.py`.
 
 ## Tras verificar pipeline / infra
 

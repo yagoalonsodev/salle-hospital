@@ -1,6 +1,6 @@
 # Backlog — salle-hospital
 
-Última actualización: 2026-05-02
+Última actualización: 2026-05-03
 
 Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 
@@ -22,6 +22,10 @@ Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 | D2-01 | Esquema PostgreSQL (pacientes, estudios, predicciones, pipeline) | [pipeline-esquema-db.md](pipeline-esquema-db.md) | `01-init-salle-schema.sql`, `docs/database-architecture.md` |
 | D2-04 | Carga automática imágenes → MinIO | [pipeline-ingesta-imagenes-calidad.md](pipeline-ingesta-imagenes-calidad.md) | `jobs/ingest_validate_images.py` |
 | D2-05 | Validación y deduplicación (calidad) | [pipeline-ingesta-imagenes-calidad.md](pipeline-ingesta-imagenes-calidad.md) | Parquet validated/rejected + Postgres |
+| D2-06 | Watcher de nuevas imágenes RX | [airflow-automatizacion-watcher.md](airflow-automatizacion-watcher.md) | `salle-watcher`, `incoming/` |
+| D2-07 | Logging básico Airflow | [airflow-automatizacion-watcher.md](airflow-automatizacion-watcher.md) | `airflow/config/log_config.py` |
+| D2-08 | Persistencia Docker (volúmenes) | [airflow-automatizacion-watcher.md](airflow-automatizacion-watcher.md) | `postgres_data`, `minio_data`, `airflow_metadata` |
+| D8-01 | DAG pipeline RX automatizado | [airflow-automatizacion-watcher.md](airflow-automatizacion-watcher.md) | `salle_rx_pipeline` (parcial: ingesta) |
 
 ---
 
@@ -29,7 +33,7 @@ Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 
 | ID | Tarea | Spec | Notas |
 |----|-------|------|-------|
-| — | — | — | — |
+| D2-03 | Job PySpark: ingesta CSV → Postgres | `pipeline-ingesta-csv.md` | Siguiente prioridad datos |
 
 ---
 
@@ -39,7 +43,7 @@ Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 
 | ID | Tarea | Prioridad | Spec |
 |----|-------|-----------|------|
-| D2-03 | Job PySpark: ingesta CSV → Postgres | Alta | `pipeline-ingesta-csv.md` |
+| D2-03 | Job PySpark: ingesta CSV → Postgres | Alta | `pipeline-ingesta-csv.md` (pendiente) |
 
 ### Día 4–5 · ML (TensorFlow)
 
@@ -65,7 +69,7 @@ Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 |----|-------|-----------|------|
 | D7-01 | Dashboard Streamlit (métricas, matriz confusión) | Alta | `dashboard-vista-clinica.md` |
 | D7-02 | Alertas simuladas en dashboard | Media | `dashboard-alertas.md` |
-| D8-01 | DAG Airflow: ingesta diaria | Alta | `airflow-dag-ingesta.md` |
+| D8-01 | DAG Airflow: ingesta diaria | Alta | Cubierto por `salle_rx_pipeline`; ampliar en `airflow-dag-ingesta.md` |
 | D8-02 | DAG Airflow: ETL Spark | Alta | `airflow-dag-etl.md` |
 | D8-03 | DAG Airflow: inferencia batch ML | Alta | `airflow-dag-ml.md` |
 | D8-04 | DAG Airflow: informes y alertas | Media | `airflow-dag-informes.md` |

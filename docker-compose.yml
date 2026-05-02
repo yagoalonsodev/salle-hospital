@@ -29,12 +29,25 @@ x-airflow-common: &airflow-common
     MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
     MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
     MINIO_BUCKET: ${MINIO_BUCKET:-xray-images}
+    AIRFLOW__LOGGING__LOGGING_LEVEL: INFO
+    AIRFLOW__LOGGING__FAB_LOGGING_LEVEL: WARNING
+    AIRFLOW__LOGGING__LOGGING_CONFIG_CLASS: log_config.LOGGING_CONFIG
+    PYTHONPATH: /opt/airflow/config
+    _PIP_ADDITIONAL_REQUIREMENTS: docker>=7.0.0
+    AIRFLOW_SCRIPTS_DIR: /opt/scripts
+    DATA_ROOT: /opt/data
+    PIPELINE_CONTAINER: salle-pipeline
+    MAX_UPLOAD: "0"
   volumes:
     - ./airflow/dags:/opt/airflow/dags
     - ./airflow/logs:/opt/airflow/logs
     - ./airflow/plugins:/opt/airflow/plugins
+    - ./airflow/config:/opt/airflow/config
+    - ./scripts:/opt/scripts:ro
     - ./data:/opt/data
     - ./pipeline:/opt/pipeline
+    - airflow_metadata:/opt/airflow
+    - /var/run/docker.sock:/var/run/docker.sock
   networks:
     - salle-net
 
@@ -216,6 +229,23 @@ services:
     networks:
       - salle-net
 
+  watcher:
+    build:
+      context: .
+      dockerfile: infra/watcher/Dockerfile
+    container_name: salle-watcher
+    restart: unless-stopped
+    environment:
+      DATA_ROOT: /opt/data
+      WATCH_INCOMING_DIR: /opt/data/raw/covid19_vs_pneumonia/incoming
+      WATCHER_DEBOUNCE_SEC: ${WATCHER_DEBOUNCE_SEC:-2.0}
+    volumes:
+      - ./data:/opt/data
+    depends_on:
+      - spark-master
+    networks:
+      - salle-net
+
   pipeline:
     build:
       context: ./pipeline
@@ -229,6 +259,7 @@ services:
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
       MINIO_BUCKET: ${MINIO_BUCKET:-xray-images}
       DATA_ROOT: /opt/data
+      MAX_UPLOAD: "0"
     depends_on:
       - spark-master
       - postgres
@@ -242,6 +273,7 @@ services:
 volumes:
   postgres_data:
   minio_data:
+  airflow_metadata:
 
 networks:
   salle-net:

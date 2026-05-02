@@ -53,6 +53,10 @@ python scripts/build_clinical_data.py
 | COVID-19 vs Pneumonia (Kaggle-style) | Entrenamiento MVP | sana, neumonia, covid |
 | NIH Chest X-rays (opcional) | Más `No Finding` / 2ª fuente | Solo documentar si se añade |
 
+## Bandeja de nuevas imágenes (watcher)
+
+Copia RX en `raw/covid19_vs_pneumonia/incoming/train/NORMAL/` (u otra clase). El servicio `salle-watcher` las mueve al árbol y el DAG Airflow `salle_rx_pipeline` procesa la cola. Ver [`incoming/README.md`](raw/covid19_vs_pneumonia/incoming/README.md) y [`airflow/README.md`](../airflow/README.md).
+
 ## Pipeline de imágenes (PySpark)
 
 ```bash

@@ -31,7 +31,7 @@ docker exec salle-pipeline /opt/spark/bin/spark-submit \
 | `UPLOAD_MINIO` | `true` |
 | `MINIO_ENDPOINT` | `minio:9000` |
 | `DATABASE_URL` | (compose) |
-| `MAX_UPLOAD` | `0` (= todas; usar `100` para prueba rápida MinIO) |
+| `MAX_UPLOAD` | `0` (obligatorio en producción: sube **todas** las válidas a MinIO) |
 
 ### Informe
 

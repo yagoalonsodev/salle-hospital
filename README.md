@@ -71,6 +71,38 @@ docker compose up -d --build
 | MinIO API | http://localhost:9000 | ver `.env` |
 | MinIO Console | http://localhost:9001 | ver `.env` |
 | Spark Master UI | http://localhost:8080 | — |
+| Watcher RX | — (ver logs `docker logs salle-watcher`) | — |
+
+### Automatización (watcher + Airflow)
+
+1. Levantar watcher y despausar el DAG:
+
+```bash
+docker compose up -d watcher airflow pipeline spark-master spark-worker
+docker exec salle-airflow airflow dags unpause salle_rx_pipeline
+```
+
+2. Dejar una imagen en la bandeja de entrada:
+
+```text
+data/raw/covid19_vs_pneumonia/incoming/train/NORMAL/mi_rx.jpg
+```
+
+3. El watcher la mueve al árbol `raw/`, marca pendiente y el DAG `salle_rx_pipeline` lanza PySpark + MinIO.
+
+Detalle: [`airflow/README.md`](airflow/README.md).
+
+### Persistencia Docker
+
+| Volumen | Contenido |
+|---------|-----------|
+| `postgres_data` | BD hospital + metadatos Airflow |
+| `minio_data` | Objetos RX en MinIO |
+| `airflow_metadata` | `airflow.db` y config interna |
+| `./data` (bind) | Raw, processed, estado watcher |
+| `./airflow/logs` (bind) | Logs de tareas y scheduler |
+
+`docker compose down` **sin** `-v` conserva los volúmenes nombrados.
 
 ## Estado del proyecto
 
@@ -78,7 +110,8 @@ docker compose up -d --build
 |-----|------------|--------|
 | 1 (1 may) | Arquitectura, estructura, docker-compose base | Completado |
 | 2 (datos) | RX en `data/raw`, CSV clínico, esquema PostgreSQL | Completado |
-| 2–10 | Ingesta Postgres/MinIO, ML, API, dashboard, Airflow | Planificado |
+| 2 (mañana) | Pipeline PySpark, verificación, JPEG, watcher + DAG Airflow | Completado |
+| 2–10 | Ingesta CSV→Postgres, ML, API, dashboard | En curso / planificado |
 
 ## Planificación
 

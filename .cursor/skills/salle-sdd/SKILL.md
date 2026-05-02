@@ -104,6 +104,23 @@ El prefijo `YYYY-MM-DD` debe coincidir con la **fecha del commit** en `main` (`g
 | [2026-05-02-sin-patients-csv.md](sessions/2026-05-02-sin-patients-csv.md) | `77607d0` 10:00 | Sin `patients.csv` |
 | [2026-05-02-ingesta-imagenes.md](sessions/2026-05-02-ingesta-imagenes.md) | `33c9140` 11:00 | PySpark ingesta, validación, dedup, MinIO |
 | [2026-05-02-verificacion-integracion.md](sessions/2026-05-02-verificacion-integracion.md) | `b215ee3` 11:30 | Verificación E2E Postgres + MinIO |
+| [2026-05-02-watcher-airflow.md](sessions/2026-05-02-watcher-airflow.md) | tarde | Watcher RX, DAG Airflow, logging, volúmenes |
+
+## Automatización (watcher + Airflow)
+
+| Recurso | Ruta |
+|---------|------|
+| Spec | `docs/specs/airflow-automatizacion-watcher.md` |
+| Watcher | `scripts/image_watcher.py`, servicio `salle-watcher` |
+| DAG | `airflow/dags/salle_rx_pipeline.py` |
+| Trigger Spark | `scripts/airflow_trigger_ingest.py` |
+| Logging | `airflow/config/log_config.py` |
+| Guía | `airflow/README.md` |
+| Bandeja RX | `data/raw/covid19_vs_pneumonia/incoming/` |
+
+**MinIO:** `MAX_UPLOAD=0` en `docker-compose.yml` (Airflow + pipeline) — sube **todas** las imágenes válidas, sin tope.
+
+Tras cambios: `docker compose up -d watcher airflow`, `airflow dags unpause salle_rx_pipeline`, copiar RX a `incoming/`.
 
 ## Verificación tras cambios de pipeline
 
@@ -114,3 +131,4 @@ Tras implementar o modificar jobs en `pipeline/jobs/`:
 3. Normalizar JPEG si hace falta: `scripts/convert_rx_to_jpeg.py`
 4. Ejecutar job (ver `pipeline/README.md`)
 5. Ejecutar `scripts/verify_pipeline_integration.py` dentro de `salle-pipeline`
+6. Si hay watcher/DAG: `docker logs salle-watcher`; `airflow dags trigger salle_rx_pipeline`
