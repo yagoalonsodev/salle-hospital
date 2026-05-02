@@ -102,8 +102,8 @@ El prefijo `YYYY-MM-DD` debe coincidir con la **fecha del commit** en `main` (`g
 | [2026-05-02-datos-ejemplo.md](sessions/2026-05-02-datos-ejemplo.md) | `fda8c86` 09:00 | Datos raw, CSV, manifest |
 | [2026-05-02-esquema-db.md](sessions/2026-05-02-esquema-db.md) | `fda8c86` 09:00 | Esquema PostgreSQL |
 | [2026-05-02-sin-patients-csv.md](sessions/2026-05-02-sin-patients-csv.md) | `77607d0` 10:00 | Sin `patients.csv` |
-| [2026-05-02-ingesta-imagenes.md](sessions/2026-05-02-ingesta-imagenes.md) | 11:00 | PySpark ingesta, validación, dedup, MinIO |
-| [2026-05-02-verificacion-integracion.md](sessions/2026-05-02-verificacion-integracion.md) | 11:30 | Verificación E2E Postgres + MinIO |
+| [2026-05-02-ingesta-imagenes.md](sessions/2026-05-02-ingesta-imagenes.md) | `33c9140` 11:00 | PySpark ingesta, validación, dedup, MinIO |
+| [2026-05-02-verificacion-integracion.md](sessions/2026-05-02-verificacion-integracion.md) | `b215ee3` 11:30 | Verificación E2E Postgres + MinIO |
 
 ## Verificación tras cambios de pipeline
 

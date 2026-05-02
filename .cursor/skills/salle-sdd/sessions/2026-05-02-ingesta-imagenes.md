@@ -1,6 +1,6 @@
 # Sesión SDD — Ingesta, validación y deduplicación (2026-05-02)
 
-> Commit del job PySpark de ingesta (2 mayo, mañana).
+> Commit: `33c9140` — 2026-05-02 11:00
 
 ## Flujo aplicado
 

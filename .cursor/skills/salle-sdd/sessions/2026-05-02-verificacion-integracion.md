@@ -1,6 +1,6 @@
 # Sesión SDD — Verificación Postgres + MinIO (2026-05-02)
 
-> Commit del script de verificación E2E (2 mayo, mañana).
+> Commit: `b215ee3` — 2026-05-02 11:30
 
 ## Objetivo
 
