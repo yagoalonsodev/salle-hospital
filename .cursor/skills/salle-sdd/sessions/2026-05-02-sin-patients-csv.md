@@ -1,4 +1,6 @@
-# Sesión SDD — Eliminar patients.csv (2026-05-16)
+# Sesión SDD — Eliminar patients.csv (2026-05-02)
+
+> Commit: `77607d0` — 2026-05-02 10:00
 
 ## Decisión
 

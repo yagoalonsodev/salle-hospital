@@ -69,8 +69,22 @@ Ver `docs/diario-ia/entradas/2026-05-01.md` como referencia de formato.
 | Índice global | `docs/diario-ia/INDEX.md` |
 | Entradas por día | `docs/diario-ia/entradas/YYYY-MM-DD.md` |
 | Plantilla | [entry-template.md](entry-template.md) |
-| Ejemplo sesión (BD) | [sessions/2026-05-16-esquema-db.md](sessions/2026-05-16-esquema-db.md) |
-| Ejemplo sesión (datos) | [sessions/2026-05-16-sin-patients-csv.md](sessions/2026-05-16-sin-patients-csv.md) |
+| Convención | Prefijo `YYYY-MM-DD` = fecha del commit (`git log`); sin commit → `pendiente-*.md` |
+| 2026-05-01 | [sessions/2026-05-01-skills-diario.md](sessions/2026-05-01-skills-diario.md) (`7fe54ab`) |
+| 2026-05-02 datos | [sessions/2026-05-02-datos-ejemplo.md](sessions/2026-05-02-datos-ejemplo.md) (`fda8c86`) |
+| 2026-05-02 BD | [sessions/2026-05-02-esquema-db.md](sessions/2026-05-02-esquema-db.md) (`fda8c86`) |
+| 2026-05-02 CSV | [sessions/2026-05-02-sin-patients-csv.md](sessions/2026-05-02-sin-patients-csv.md) (`77607d0`) |
+| 2026-05-02 pipeline | [sessions/2026-05-02-ingesta-imagenes.md](sessions/2026-05-02-ingesta-imagenes.md) |
+| 2026-05-02 verificación | [sessions/2026-05-02-verificacion-integracion.md](sessions/2026-05-02-verificacion-integracion.md) |
+
+## Tras verificar pipeline / infra
+
+Si el usuario pide comprobar que «funciona todo» (MinIO, Postgres, encargo):
+
+1. Ejecutar o revisar salida de `ingest_validate_images.py`
+2. Correr `scripts/verify_pipeline_integration.py` en `salle-pipeline`
+3. Documentar resultado en entrada de diario (`acierto` / `corrección`)
+4. Actualizar sesión en `.cursor/skills/diario-ia/sessions/` si hubo cambios relevantes
 
 ## Relación con SDD
 

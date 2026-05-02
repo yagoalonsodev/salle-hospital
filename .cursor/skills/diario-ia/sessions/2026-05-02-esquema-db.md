@@ -1,6 +1,7 @@
-# Diario IA — Esquema PostgreSQL (2026-05-16)
+# Diario IA — Esquema PostgreSQL (2026-05-02)
 
-> Copia orientativa; entrada canónica en `docs/diario-ia/entradas/2026-05-16.md` § Entrada 002.
+> Copia orientativa; entrada canónica en `docs/diario-ia/entradas/2026-05-02.md` § Entrada 002.  
+> Commit: `fda8c86` — 2026-05-02 09:00
 
 | Campo | Valor |
 |-------|-------|

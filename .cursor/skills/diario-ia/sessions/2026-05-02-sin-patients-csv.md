@@ -1,4 +1,6 @@
-# Diario IA — Sin patients.csv (2026-05-16)
+# Diario IA — Sin patients.csv (2026-05-02)
+
+> Commit: `77607d0` — 2026-05-02 10:00
 
 | Campo | Valor |
 |-------|-------|
@@ -16,4 +18,4 @@ Eliminar patients.csv falso; mantener studies/manifest; actualizar script y docs
 
 - Eliminado `data/raw/clinical/patients.csv`.
 - `studies.csv` conserva `patient_id` opaco (1:1) para FK en Postgres.
-- Sesión SDD: [salle-sdd/sessions/2026-05-16-sin-patients-csv.md](../../salle-sdd/sessions/2026-05-16-sin-patients-csv.md).
+- Sesión SDD: [salle-sdd/sessions/2026-05-02-sin-patients-csv.md](../../salle-sdd/sessions/2026-05-02-sin-patients-csv.md).

@@ -90,9 +90,27 @@ Toda implementación relevante debería tener entrada en el diario (con confirma
 | Plantilla spec | `docs/specs/_TEMPLATE.md` |
 | Datos raw | `data/README.md` |
 
-## Ejemplo de sesión SDD
+## Convención de nombres en `sessions/`
 
-| Sesión | Tema |
-|--------|------|
-| [2026-05-16-esquema-db.md](sessions/2026-05-16-esquema-db.md) | Spec → SQL → doc BD |
-| [2026-05-16-sin-patients-csv.md](sessions/2026-05-16-sin-patients-csv.md) | Quitar `patients.csv`; solo `studies` + manifest |
+El prefijo `YYYY-MM-DD` debe coincidir con la **fecha del commit** en `main` (`git log --format=%ad`). Varios commits el mismo día → mismo prefijo, distinto sufijo. Trabajo sin commit → `pendiente-*.md` hasta commitear.
+
+## Sesiones (alineadas con commits)
+
+| Sesión | Commit | Tema |
+|--------|--------|------|
+| [2026-05-01-skills-diario.md](sessions/2026-05-01-skills-diario.md) | `7fe54ab` 21:20 | Skills Diario IA + SDD |
+| [2026-05-02-datos-ejemplo.md](sessions/2026-05-02-datos-ejemplo.md) | `fda8c86` 09:00 | Datos raw, CSV, manifest |
+| [2026-05-02-esquema-db.md](sessions/2026-05-02-esquema-db.md) | `fda8c86` 09:00 | Esquema PostgreSQL |
+| [2026-05-02-sin-patients-csv.md](sessions/2026-05-02-sin-patients-csv.md) | `77607d0` 10:00 | Sin `patients.csv` |
+| [2026-05-02-ingesta-imagenes.md](sessions/2026-05-02-ingesta-imagenes.md) | 11:00 | PySpark ingesta, validación, dedup, MinIO |
+| [2026-05-02-verificacion-integracion.md](sessions/2026-05-02-verificacion-integracion.md) | 11:30 | Verificación E2E Postgres + MinIO |
+
+## Verificación tras cambios de pipeline
+
+Tras implementar o modificar jobs en `pipeline/jobs/`:
+
+1. Levantar stack: `docker compose up -d`
+2. Aplicar esquema si hace falta: `infra/postgres/01-init-salle-schema.sql`
+3. Normalizar JPEG si hace falta: `scripts/convert_rx_to_jpeg.py`
+4. Ejecutar job (ver `pipeline/README.md`)
+5. Ejecutar `scripts/verify_pipeline_integration.py` dentro de `salle-pipeline`

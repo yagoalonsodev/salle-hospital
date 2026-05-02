@@ -1,4 +1,6 @@
-# Sesión SDD — Esquema PostgreSQL (2026-05-16)
+# Sesión SDD — Esquema PostgreSQL (2026-05-02)
+
+> Commit: `fda8c86` — 2026-05-02 09:00
 
 ## Flujo aplicado
 
@@ -15,6 +17,10 @@
 | Spec | `docs/specs/pipeline-esquema-db.md` |
 | Init SQL | `infra/postgres/01-init-salle-schema.sql` |
 | Doc BD | `docs/database-architecture.md` |
+
+## Mismo commit (`fda8c86`)
+
+Incluye también D2-02 (datos/CSV): ver [2026-05-02-datos-ejemplo.md](2026-05-02-datos-ejemplo.md).
 
 ## Pendiente
 
