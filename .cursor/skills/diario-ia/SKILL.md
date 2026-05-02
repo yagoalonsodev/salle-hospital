@@ -69,7 +69,8 @@ Ver `docs/diario-ia/entradas/2026-05-01.md` como referencia de formato.
 | Índice global | `docs/diario-ia/INDEX.md` |
 | Entradas por día | `docs/diario-ia/entradas/YYYY-MM-DD.md` |
 | Plantilla | [entry-template.md](entry-template.md) |
-| Ejemplo sesión | [sessions/2026-05-16-esquema-db.md](sessions/2026-05-16-esquema-db.md) |
+| Ejemplo sesión (BD) | [sessions/2026-05-16-esquema-db.md](sessions/2026-05-16-esquema-db.md) |
+| Ejemplo sesión (datos) | [sessions/2026-05-16-sin-patients-csv.md](sessions/2026-05-16-sin-patients-csv.md) |
 
 ## Relación con SDD
 

@@ -85,7 +85,7 @@ erDiagram
 
 | Tabla | Rol | Origen de datos |
 |-------|-----|-----------------|
-| `patients` | Paciente anonimizado | CSV `data/raw/clinical/patients.csv` → ingesta Spark |
+| `patients` | Paciente anonimizado (ID opaco) | Ingesta D2-03: filas mínimas desde `patient_id` distintos en `studies.csv` |
 | `studies` | Metadatos de cada RX + enlace a fichero/MinIO | CSV `studies.csv` + `manifest.csv` |
 | `predictions` | Resultado inferencia TensorFlow | Servicio `ml` tras cargar estudio |
 | `pipeline_runs` | Cabecera de job (ingesta, ETL, ML batch) | Airflow / Spark |
@@ -115,7 +115,7 @@ file_path                     ruta local en ingesta inicial
 
 Flujo previsto:
 
-1. Ingesta: CSV → `patients`, `studies` (sin `minio_object_key`).
+1. Ingesta: `studies.csv` → `studies`; `patients` con INSERT mínimo por `patient_id` único (sin CSV aparte).
 2. Carga imágenes: fichero → MinIO → `UPDATE studies SET minio_object_key = …`.
 3. Inferencia: ML lee MinIO, escribe `predictions`.
 
@@ -150,8 +150,7 @@ docker exec -i salle-postgres psql -U salle -d salle_hospital < infra/postgres/0
 
 | CSV | Tabla |
 |-----|-------|
-| `patients.csv` | `patients` |
-| `studies.csv` | `studies` |
+| `studies.csv` | `studies` + `patients` (IDs únicos, sin demografía inventada) |
 | `pipeline_events.csv` | `pipeline_events` (+ fila previa en `pipeline_runs`) |
 
 El script de ingesta (D2-03) debe crear `pipeline_runs` antes de insertar eventos por la FK.

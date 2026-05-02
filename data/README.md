@@ -9,10 +9,9 @@ data/
 ├── raw/                              # Entrada (no versionado en bloque)
 │   ├── covid19_vs_pneumonia/         # RX: train|test / COVID19|NORMAL|PNEUMONIA
 │   │   └── manifest.csv            # Una fila por imagen + label unificada
-│   └── clinical/                     # CSV simulados (ingesta Spark)
-│       ├── patients.csv
-│       ├── studies.csv
-│       └── pipeline_events.csv
+│   └── clinical/                     # CSV derivados del dataset RX (ingesta Spark)
+│       ├── studies.csv               # Una fila por imagen (+ patient_id opaco)
+│       └── pipeline_events.csv       # Log simulado de ingesta
 └── processed/                        # Salida ETL / preprocesado ML
     ├── manifest/
     └── features/

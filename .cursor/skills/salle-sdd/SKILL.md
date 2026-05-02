@@ -92,4 +92,7 @@ Toda implementación relevante debería tener entrada en el diario (con confirma
 
 ## Ejemplo de sesión SDD
 
-Ver [sessions/2026-05-16-esquema-db.md](sessions/2026-05-16-esquema-db.md) (spec → SQL → doc BD).
+| Sesión | Tema |
+|--------|------|
+| [2026-05-16-esquema-db.md](sessions/2026-05-16-esquema-db.md) | Spec → SQL → doc BD |
+| [2026-05-16-sin-patients-csv.md](sessions/2026-05-16-sin-patients-csv.md) | Quitar `patients.csv`; solo `studies` + manifest |

@@ -23,8 +23,7 @@ Preparar datos locales alineados con `enunciado.md` y `docs/architecture.md`: ra
 |--------|------|---------|
 | Imágenes organizadas | JPG | `data/raw/covid19_vs_pneumonia/{train,test}/{COVID19,NORMAL,PNEUMONIA}/` |
 | Manifiesto de imágenes | CSV | `data/raw/covid19_vs_pneumonia/manifest.csv` |
-| Pacientes simulados | CSV | `data/raw/clinical/patients.csv` |
-| Estudios / RX | CSV | `data/raw/clinical/studies.csv` |
+| Estudios / RX | CSV | `data/raw/clinical/studies.csv` (incluye `patient_id` opaco 1:1) |
 | Logs operativos | CSV | `data/raw/clinical/pipeline_events.csv` |
 | Salida ETL (futuro) | Parquet/CSV | `data/processed/` |
 
@@ -45,7 +44,7 @@ Preparar datos locales alineados con `enunciado.md` y `docs/architecture.md`: ra
 ## 5. Criterios de aceptación
 
 - [x] Dataset RX en `data/raw/covid19_vs_pneumonia/` con 3 clases y splits train/test.
-- [x] CSV `patients`, `studies`, `pipeline_events` en `data/raw/clinical/`.
+- [x] CSV `studies`, `pipeline_events` en `data/raw/clinical/` (sin `patients.csv`).
 - [x] `manifest.csv` con una fila por imagen y etiqueta unificada.
 - [x] `data/processed/` preparado para salida Spark/ML.
 - [x] `ml/models/` reservado para SavedModel (sin pesos en repo).
@@ -73,7 +72,7 @@ Preparar datos locales alineados con `enunciado.md` y `docs/architecture.md`: ra
 ```text
 Reorganiza datos según docs/specs/pipeline-datos-ejemplo.md:
 mover RX a data/raw/covid19_vs_pneumonia, generar CSV clínico simulado
-(patients, studies, pipeline_events) y manifest, mantener ml/models para SavedModel.
+(studies, pipeline_events) y manifest, mantener ml/models para SavedModel.
 ```
 
 ## 9. Notas de implementación

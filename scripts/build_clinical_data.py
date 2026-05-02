@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-"""Genera CSV clínico simulado y manifest desde data/raw/covid19_vs_pneumonia."""
+"""Genera manifest y studies.csv desde data/raw/covid19_vs_pneumonia.
+
+No genera patients.csv: patient_id en studies es derivado (1:1 por imagen).
+La tabla patients en Postgres se rellena en la ingesta (D2-03) desde studies.
+"""
 
 from __future__ import annotations
 
 import csv
 import hashlib
-import random
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -19,9 +22,6 @@ LABEL_MAP = {
     "PNEUMONIA": "neumonia",
     "COVID19": "covid",
 }
-
-SEXES = ("M", "F", "X")
-AGE_RANGES = ("18-30", "31-45", "46-60", "61-75", "76+")
 
 
 def iter_images() -> list[dict]:
@@ -51,7 +51,8 @@ def iter_images() -> list[dict]:
     return rows
 
 
-def stable_patient_id(file_path: str) -> str:
+def patient_id_for(file_path: str) -> str:
+    """ID opaco 1:1 con el estudio (sin CSV de pacientes aparte)."""
     h = hashlib.sha256(file_path.encode()).hexdigest()[:10]
     return f"PAT-{h}"
 
@@ -66,25 +67,14 @@ def main() -> None:
 
     CLINICAL_DIR.mkdir(parents=True, exist_ok=True)
     base_date = datetime(2026, 4, 1, 8, 0, 0)
-    rng = random.Random(42)
 
-    patients: dict[str, dict] = {}
     studies: list[dict] = []
-
     for i, img in enumerate(images):
-        pid = stable_patient_id(img["file_path"])
-        if pid not in patients:
-            patients[pid] = {
-                "patient_id": pid,
-                "sex": rng.choice(SEXES),
-                "age_range": rng.choice(AGE_RANGES),
-                "site_code": "LSHC-01",
-            }
         study_id = f"STU-{hashlib.md5(img['file_path'].encode()).hexdigest()[:12]}"
         studies.append(
             {
                 "study_id": study_id,
-                "patient_id": pid,
+                "patient_id": patient_id_for(img["file_path"]),
                 "file_path": img["file_path"],
                 "split": img["split"],
                 "label": img["label"],
@@ -104,14 +94,6 @@ def main() -> None:
         )
         w.writeheader()
         w.writerows(images)
-
-    with (CLINICAL_DIR / "patients.csv").open("w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(
-            f,
-            fieldnames=["patient_id", "sex", "age_range", "site_code"],
-        )
-        w.writeheader()
-        w.writerows(sorted(patients.values(), key=lambda r: r["patient_id"]))
 
     with (CLINICAL_DIR / "studies.csv").open("w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(
@@ -147,7 +129,7 @@ def main() -> None:
             "stage": "validacion",
             "status": "ok",
             "records": len(images),
-            "message": "6432 imágenes; 3 clases (sana, neumonia, covid)",
+            "message": f"{len(images)} imágenes; 3 clases (sana, neumonia, covid)",
             "logged_at": datetime(2026, 4, 1, 9, 5, 0).isoformat(),
         },
     ]
@@ -169,16 +151,20 @@ def main() -> None:
         w.writeheader()
         w.writerows(events)
 
+    patients_path = CLINICAL_DIR / "patients.csv"
+    if patients_path.exists():
+        patients_path.unlink()
+
     by_label: dict[str, int] = {}
     for img in images:
         by_label[img["label"]] = by_label.get(img["label"], 0) + 1
 
     print(f"Imágenes: {len(images)}")
-    print(f"Pacientes simulados: {len(patients)}")
-    print(f"Estudios: {len(studies)}")
+    print(f"Estudios (studies.csv): {len(studies)}")
     print("Por etiqueta:", by_label)
     print(f"Manifest: {MANIFEST_PATH}")
-    print(f"CSV clínico: {CLINICAL_DIR}")
+    print(f"CSV: {CLINICAL_DIR}/studies.csv, pipeline_events.csv")
+    print("(sin patients.csv — patient_id solo en studies)")
 
 
 if __name__ == "__main__":
