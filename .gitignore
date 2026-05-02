@@ -11,6 +11,8 @@ data/raw/*
 data/processed/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
+!data/processed/manifest/.gitkeep
+!data/processed/features/.gitkeep
 *.pth
 *.pt
 *.ckpt

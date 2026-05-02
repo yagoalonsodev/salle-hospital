@@ -78,3 +78,18 @@ Specs de Airflow en `docs/specs/airflow-*.md`; implementación en `airflow/dags/
 ## Integración con Diario IA
 
 Toda implementación relevante debería tener entrada en el diario (con confirmación del usuario). Enlazar spec ↔ entrada del diario.
+
+## Documentación de referencia del repo
+
+| Tema | Ruta |
+|------|------|
+| Encargo | `enunciado.md` |
+| Arquitectura sistema | `docs/architecture.md` |
+| Arquitectura BD | `docs/database-architecture.md` |
+| Backlog | `docs/specs/BACKLOG.md` |
+| Plantilla spec | `docs/specs/_TEMPLATE.md` |
+| Datos raw | `data/README.md` |
+
+## Ejemplo de sesión SDD
+
+Ver [sessions/2026-05-16-esquema-db.md](sessions/2026-05-16-esquema-db.md) (spec → SQL → doc BD).

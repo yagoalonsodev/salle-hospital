@@ -1,6 +1,6 @@
 # Backlog — salle-hospital
 
-Última actualización: 2026-05-01
+Última actualización: 2026-05-16
 
 Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 
@@ -18,6 +18,8 @@ Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 | D1-06 | README y `.env.example` | — | Arranque `docker compose up -d --build` |
 | D1-07 | Fix mount callback Docker Desktop (macOS) | — | Healthcheck API + depends_on dashboard |
 | D1-08 | Skills Cursor: Diario IA + SDD | — | `.cursor/skills/` |
+| D2-02 | Datos de ejemplo: RX en `raw/`, CSV clínico, manifest | [pipeline-datos-ejemplo.md](pipeline-datos-ejemplo.md) | 6432 JPG; `scripts/build_clinical_data.py` |
+| D2-01 | Esquema PostgreSQL (pacientes, estudios, predicciones, pipeline) | [pipeline-esquema-db.md](pipeline-esquema-db.md) | `01-init-salle-schema.sql`, `docs/database-architecture.md` |
 
 ---
 
@@ -35,8 +37,6 @@ Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 
 | ID | Tarea | Prioridad | Spec |
 |----|-------|-----------|------|
-| D2-01 | Esquema PostgreSQL (pacientes, estudios, predicciones, logs pipeline) | Alta | `pipeline-esquema-db.md` |
-| D2-02 | Datos de ejemplo (CSV + RX simuladas) en `data/raw` | Alta | `pipeline-datos-ejemplo.md` |
 | D2-03 | Job PySpark: ingesta CSV → Postgres | Alta | `pipeline-ingesta-csv.md` |
 | D2-04 | Job PySpark: carga imágenes → MinIO + metadatos | Alta | `pipeline-ingesta-imagenes.md` |
 | D2-05 | Validación calidad (incompletos, duplicados, corruptos) | Alta | `pipeline-calidad-datos.md` |

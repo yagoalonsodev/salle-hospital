@@ -62,6 +62,15 @@ Muestra el borrador en markdown y pide cambios. Solo escribe el archivo cuando c
 
 Ver `docs/diario-ia/entradas/2026-05-01.md` como referencia de formato.
 
+## Índice y sesiones
+
+| Recurso | Ruta |
+|---------|------|
+| Índice global | `docs/diario-ia/INDEX.md` |
+| Entradas por día | `docs/diario-ia/entradas/YYYY-MM-DD.md` |
+| Plantilla | [entry-template.md](entry-template.md) |
+| Ejemplo sesión | [sessions/2026-05-16-esquema-db.md](sessions/2026-05-16-esquema-db.md) |
+
 ## Relación con SDD
 
 Si la interacción implementó una spec, enlaza `docs/specs/<nombre>.md` y actualiza el estado en `docs/specs/BACKLOG.md` (skill `salle-sdd`).

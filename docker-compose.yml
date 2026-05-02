@@ -50,6 +50,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./infra/postgres/01-init-salle-schema.sql:/docker-entrypoint-initdb.d/01-init-salle-schema.sql:ro
       - ./infra/postgres/init-airflow-db.sql:/docker-entrypoint-initdb.d/02-init-airflow-db.sql:ro
     healthcheck:
       test:

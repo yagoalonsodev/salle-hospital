@@ -147,14 +147,17 @@ flowchart TB
 
 ---
 
-## 5. Modelo de datos (borrador)
+## 5. Modelo de datos
 
-**PostgreSQL**
+Detalle del esquema PostgreSQL (tablas, ER, ENUMs, MinIO): **[database-architecture.md](database-architecture.md)**.
+
+**PostgreSQL** (`salle_hospital`)
 
 - `patients` — identificador, datos demográficos básicos (anonimizados/simulados).
 - `studies` — estudio de imagen, ruta MinIO, timestamps.
 - `predictions` — clase predicha, probabilidades, modelo, versión.
 - `pipeline_runs` — job, estado, registros procesados, errores de calidad.
+- `pipeline_events`, `data_quality_issues`, `alerts` — logs, calidad y dashboard.
 
 **MinIO**
 

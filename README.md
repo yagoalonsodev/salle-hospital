@@ -16,7 +16,8 @@ Sistema inteligente de soporte hospitalario para **laSalle Health Center**: pipe
 
 ## Arquitectura
 
-Diagrama y decisiones técnicas: [`docs/architecture.md`](docs/architecture.md).
+Diagrama y decisiones técnicas: [`docs/architecture.md`](docs/architecture.md).  
+Base de datos: [`docs/database-architecture.md`](docs/database-architecture.md).
 
 ```mermaid
 flowchart LR
@@ -76,7 +77,8 @@ docker compose up -d --build
 | Día | Entregable | Estado |
 |-----|------------|--------|
 | 1 (1 may) | Arquitectura, estructura, docker-compose base | Completado |
-| 2–10 | Pipeline, ML, API, dashboard, automatización | Planificado |
+| 2 (datos) | RX en `data/raw`, CSV clínico, esquema PostgreSQL | Completado |
+| 2–10 | Ingesta Postgres/MinIO, ML, API, dashboard, Airflow | Planificado |
 
 ## Planificación
 
