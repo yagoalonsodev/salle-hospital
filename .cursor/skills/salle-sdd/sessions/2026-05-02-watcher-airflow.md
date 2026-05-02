@@ -1,5 +1,6 @@
 # Sesión SDD — Watcher, Airflow y persistencia Docker (2026-05-02)
 
+> Commit: `9848819` — 2026-05-02 14:00  
 > Spec: `docs/specs/airflow-automatizacion-watcher.md`
 
 ## Entregables
