@@ -27,9 +27,20 @@ ml/models/                            # SavedModel TensorFlow (no en data/)
 | `PNEUMONIA` | `neumonia` |
 | `COVID19` | `covid` |
 
+## Normalizar JPEG
+
+Si hay `.jpg` que no son JPEG real (p. ej. PNG del dataset Kaggle):
+
+```bash
+docker exec salle-pipeline pip install -q Pillow
+docker exec salle-pipeline python3 /opt/scripts/convert_rx_to_jpeg.py
+```
+
+Informe: `data/processed/manifest/conversion_report.json`.
+
 ## Regenerar CSV
 
-Tras mover o añadir imágenes en `raw/covid19_vs_pneumonia/`:
+Tras mover, convertir o añadir imágenes en `raw/covid19_vs_pneumonia/`:
 
 ```bash
 python scripts/build_clinical_data.py
@@ -42,6 +53,13 @@ python scripts/build_clinical_data.py
 | COVID-19 vs Pneumonia (Kaggle-style) | Entrenamiento MVP | sana, neumonia, covid |
 | NIH Chest X-rays (opcional) | Más `No Finding` / 2ª fuente | Solo documentar si se añade |
 
-## MinIO (runtime)
+## Pipeline de imágenes (PySpark)
 
-En Docker, las RX se copiarán a `xray-images/raw/` en MinIO (D2-04).
+```bash
+docker exec salle-pipeline /opt/spark/bin/spark-submit \
+  --master spark://spark-master:7077 \
+  /opt/pipeline/jobs/ingest_validate_images.py
+```
+
+Salida: `data/processed/manifest/validated.parquet`, `rejected.parquet`, `ingest_report.json`.  
+Ver [`pipeline/README.md`](../pipeline/README.md).
