@@ -55,3 +55,45 @@ docker exec -e DATABASE_URL=postgresql://salle:salle_secret@postgres:5432/salle_
 | Validación calidad (corruptos, duplicados) | JPEG + MD5 dedup → `rejected.parquet` |
 | Logging / monitorización | `pipeline_runs`, `pipeline_events`, `data_quality_issues` |
 | PySpark escalable | Job en cluster Spark (`spark-master`) |
+
+---
+
+## Job: preprocesado para entrenamiento ML (Día 3)
+
+Spec: [`docs/specs/pipeline-preprocesado-imagenes.md`](../docs/specs/pipeline-preprocesado-imagenes.md)  
+Justificación Spark: [`docs/preprocess-distributed-justification.md`](../docs/preprocess-distributed-justification.md)
+
+### Qué hace
+
+1. Lee `validated.parquet` (o manifest)
+2. **Resize** 224×224, **normalización** por imagen
+3. **Augmentation** en train: original, rotación, flip, zoom
+4. Split **train / validation / test** (test del dataset; train → 85/15 train/val)
+5. Escribe `data/processed/features/v1/{split}/{label}/*.jpg` + índice parquet
+
+### Ejecutar
+
+```bash
+docker compose build pipeline
+docker exec salle-pipeline /opt/spark/bin/spark-submit \
+  --master spark://spark-master:7077 \
+  --driver-memory 2g \
+  --executor-memory 2g \
+  /opt/pipeline/jobs/preprocess_images.py
+```
+
+### Variables
+
+| Variable | Default |
+|----------|---------|
+| `IMAGE_SIZE` | `224` |
+| `VAL_RATIO` | `0.15` |
+| `RANDOM_SEED` | `42` |
+| `FEATURES_VERSION` | `v1` |
+| `PREPROCESS_LIMIT` | `0` (todas; usar `50` solo para prueba rápida) |
+| `PREPROCESS_PARTITIONS` | `8` |
+
+### Salida
+
+- `data/processed/features/v1/preprocess_report.json`
+- `data/processed/features/v1/dataset_index.parquet`
