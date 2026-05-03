@@ -112,7 +112,8 @@ Detalle: [`airflow/README.md`](airflow/README.md).
 | 2 (datos) | RX en `data/raw`, CSV clínico, esquema PostgreSQL | Completado |
 | 2 (mañana) | Pipeline PySpark, verificación, JPEG, watcher + DAG Airflow | Completado |
 | 3 | Preprocesado RX (resize, aug, train/val/test) en `features/v1/` | Completado |
-| 4–10 | ML TensorFlow, API, dashboard, memoria | En curso / planificado |
+| 4 | Arquitectura ML: TL + ResNet50, doc + notebook exploratorio | Completado |
+| 5–10 | Entrenamiento, API, dashboard, memoria | En curso / planificado |
 
 ## Planificación
 

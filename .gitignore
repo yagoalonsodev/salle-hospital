@@ -24,6 +24,7 @@ data/processed/watcher/*
 *.ckpt
 ml/models/*
 !ml/models/.gitkeep
+!ml/models/*.py
 
 # Spark / logs
 pipeline/spark-warehouse/
