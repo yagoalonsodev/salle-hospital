@@ -2,7 +2,7 @@
 
 ## UI
 
-http://localhost:8081 — usuario `admin` / contraseña `Admin123.` (por defecto en `.env.example`).
+http://localhost:8081 — credenciales en `.env` (`AIRFLOW_ADMIN_USER`, `AIRFLOW_ADMIN_PASSWORD`; plantilla en `.env.example`).
 
 ## DAG `salle_rx_pipeline`
 

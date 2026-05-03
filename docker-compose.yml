@@ -1,6 +1,6 @@
 # laSalle Health Center — stack completo
 # Arranque: docker compose up -d --build
-# Airflow UI: http://localhost:8081  (admin / Admin123.)
+# Airflow UI: http://localhost:8081  (credenciales en .env → AIRFLOW_ADMIN_*)
 #
 # macOS (Docker Desktop): si aparece "mount callback failed", los contenedores
 # quedan en Created. Recuperación:

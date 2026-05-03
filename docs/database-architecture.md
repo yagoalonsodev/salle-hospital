@@ -10,7 +10,7 @@ PostgreSQL 16 aloja los datos **estructurados** de la aplicación. Las radiograf
 | `airflow` | Metadatos Airflow | `02-init-airflow-db.sql` |
 
 Conexión app (Docker):  
-`postgresql://salle:salle_secret@postgres:5432/salle_hospital`
+`DATABASE_URL` en `.env` (ver `.env.example`; no commitear `.env`)
 
 ## Diagrama entidad-relación
 

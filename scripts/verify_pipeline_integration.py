@@ -11,6 +11,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 REPORT = ROOT / "data/processed/manifest/ingest_report.json"
 
+sys.path.insert(0, str(ROOT / "scripts"))
+from env_utils import database_url, minio_config  # noqa: E402
+
 
 def check_report() -> bool:
     if not REPORT.is_file():
@@ -28,11 +31,7 @@ def check_postgres() -> bool:
         print("SKIP postgres: psycopg2 no instalado")
         return True
 
-    url = os.environ.get(
-        "DATABASE_URL",
-        "postgresql://salle:salle_secret@localhost:5432/salle_hospital",
-    )
-    conn = psycopg2.connect(url)
+    conn = psycopg2.connect(database_url())
     ok = True
     with conn.cursor() as cur:
         cur.execute(
@@ -63,10 +62,7 @@ def check_minio() -> bool:
         print("SKIP minio: librería no instalada")
         return True
 
-    endpoint = os.environ.get("MINIO_ENDPOINT", "localhost:9000")
-    access = os.environ.get("MINIO_ROOT_USER", "minioadmin")
-    secret = os.environ.get("MINIO_ROOT_PASSWORD", "minioadmin")
-    bucket = os.environ.get("MINIO_BUCKET", "xray-images")
+    endpoint, access, secret, bucket = minio_config()
 
     client = Minio(endpoint, access_key=access, secret_key=secret, secure=False)
     if not client.bucket_exists(bucket):

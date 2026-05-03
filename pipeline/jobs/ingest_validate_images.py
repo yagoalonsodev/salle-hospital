@@ -25,7 +25,13 @@ from pyspark.sql.types import (
 )
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, "/opt/scripts")
 from db_log import finish_run, log_event, log_quality_issues, start_run  # noqa: E402
+
+try:
+    from env_utils import minio_config  # noqa: E402
+except ImportError:
+    minio_config = None  # type: ignore[misc, assignment]
 
 DATA_ROOT = Path(os.environ.get("DATA_ROOT", "/opt/data"))
 MANIFEST_CSV = os.environ.get(
@@ -266,10 +272,9 @@ def _upload_to_minio(unique_valid) -> None:
         print("minio no instalado; omitiendo subida")
         return
 
-    endpoint = os.environ.get("MINIO_ENDPOINT", "minio:9000")
-    access = os.environ.get("MINIO_ROOT_USER", "minioadmin")
-    secret = os.environ.get("MINIO_ROOT_PASSWORD", "minioadmin")
-    bucket = os.environ.get("MINIO_BUCKET", "xray-images")
+    if minio_config is None:
+        raise RuntimeError("env_utils no disponible; monta /opt/scripts en el contenedor")
+    endpoint, access, secret, bucket = minio_config()
     secure = os.environ.get("MINIO_SECURE", "false").lower() == "true"
 
     client = Minio(endpoint, access_key=access, secret_key=secret, secure=secure)

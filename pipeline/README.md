@@ -41,8 +41,7 @@ Tras ejecutar, ver `data/processed/manifest/ingest_report.json`.
 
 ```bash
 # Tras el job (desde el host, con stack levantado):
-docker exec -e DATABASE_URL=postgresql://salle:salle_secret@postgres:5432/salle_hospital \
-  -e MINIO_ENDPOINT=minio:9000 \
+docker exec --env-file .env -e MINIO_ENDPOINT=minio:9000 \
   salle-pipeline python3 /opt/scripts/verify_pipeline_integration.py
 ```
 

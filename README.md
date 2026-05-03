@@ -66,7 +66,7 @@ docker compose up -d --build
 | API (FastAPI) | http://localhost:8000/docs | — |
 | ML (TensorFlow) | http://localhost:8001/health | — |
 | Dashboard (Streamlit) | http://localhost:8501 | — |
-| Airflow (standalone) | http://localhost:8081 | `admin` / `Admin123.` |
+| Airflow (standalone) | http://localhost:8081 | `.env` → `AIRFLOW_ADMIN_USER` / `AIRFLOW_ADMIN_PASSWORD` |
 | PostgreSQL | `localhost:5432` | ver `.env` |
 | MinIO API | http://localhost:9000 | ver `.env` |
 | MinIO Console | http://localhost:9001 | ver `.env` |
