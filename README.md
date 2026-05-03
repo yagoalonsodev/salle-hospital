@@ -111,7 +111,8 @@ Detalle: [`airflow/README.md`](airflow/README.md).
 | 1 (1 may) | Arquitectura, estructura, docker-compose base | Completado |
 | 2 (datos) | RX en `data/raw`, CSV clínico, esquema PostgreSQL | Completado |
 | 2 (mañana) | Pipeline PySpark, verificación, JPEG, watcher + DAG Airflow | Completado |
-| 2–10 | Ingesta CSV→Postgres, ML, API, dashboard | En curso / planificado |
+| 3 | Preprocesado RX (resize, aug, train/val/test) en `features/v1/` | Completado |
+| 4–10 | ML TensorFlow, API, dashboard, memoria | En curso / planificado |
 
 ## Planificación
 

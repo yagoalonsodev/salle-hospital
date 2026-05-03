@@ -13,6 +13,8 @@ data/processed/*
 !data/processed/.gitkeep
 !data/processed/manifest/.gitkeep
 !data/processed/features/.gitkeep
+!data/processed/features/**/preprocess_report.json
+!data/processed/features/**/dataset_index.csv
 !data/processed/watcher/.gitkeep
 data/processed/watcher/*
 *.pth

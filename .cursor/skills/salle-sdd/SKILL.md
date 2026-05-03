@@ -105,6 +105,26 @@ El prefijo `YYYY-MM-DD` debe coincidir con la **fecha del commit** en `main` (`g
 | [2026-05-02-ingesta-imagenes.md](sessions/2026-05-02-ingesta-imagenes.md) | `33c9140` 11:00 | PySpark ingesta, validación, dedup, MinIO |
 | [2026-05-02-verificacion-integracion.md](sessions/2026-05-02-verificacion-integracion.md) | `b215ee3` 11:30 | Verificación E2E Postgres + MinIO |
 | [2026-05-02-watcher-airflow.md](sessions/2026-05-02-watcher-airflow.md) | `9848819` 14:00 | Watcher RX, DAG Airflow, logging, volúmenes |
+| [2026-05-03-preprocesado-imagenes.md](sessions/2026-05-03-preprocesado-imagenes.md) | 3 mayo | Resize, aug, split train/val/test (PySpark) |
+
+## Día 3 — Preprocesado ML (`features/v1/`)
+
+| Recurso | Ruta |
+|---------|------|
+| Spec | `docs/specs/pipeline-preprocesado-imagenes.md` |
+| Justificación Spark | `docs/preprocess-distributed-justification.md` |
+| Transforms | `pipeline/jobs/image_transforms.py` |
+| Job | `pipeline/jobs/preprocess_images.py` |
+| Workers PIL | `infra/spark/Dockerfile` |
+
+```bash
+docker compose build spark-master pipeline
+docker exec salle-pipeline /opt/spark/bin/spark-submit \
+  --master spark://spark-master:7077 --driver-memory 2g \
+  /opt/pipeline/jobs/preprocess_images.py
+```
+
+Salida: `data/processed/features/v1/` + `preprocess_report.json` (6399 → ~19k muestras con aug en train).
 
 ## Automatización (watcher + Airflow)
 

@@ -77,6 +77,16 @@ Ver `docs/diario-ia/entradas/2026-05-01.md` como referencia de formato.
 | 2026-05-02 pipeline | [sessions/2026-05-02-ingesta-imagenes.md](sessions/2026-05-02-ingesta-imagenes.md) |
 | 2026-05-02 verificación | [sessions/2026-05-02-verificacion-integracion.md](sessions/2026-05-02-verificacion-integracion.md) |
 | 2026-05-02 automatización | [sessions/2026-05-02-watcher-airflow.md](sessions/2026-05-02-watcher-airflow.md) |
+| 2026-05-03 preprocesado | [sessions/2026-05-03-preprocesado-imagenes.md](sessions/2026-05-03-preprocesado-imagenes.md) |
+
+## Día 3 — Preprocesado para entrenamiento
+
+| Recurso | Ruta |
+|---------|------|
+| Entrada canónica | `docs/diario-ia/entradas/2026-05-03.md` |
+| Spec | `docs/specs/pipeline-preprocesado-imagenes.md` |
+
+Documentar: resize 224, augmentation train, split train/val/test, justificación PySpark, resultado `preprocess_report.json`.
 
 ## Automatización (watcher + Airflow)
 

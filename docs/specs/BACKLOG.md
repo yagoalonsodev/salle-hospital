@@ -1,6 +1,6 @@
 # Backlog — salle-hospital
 
-Última actualización: 2026-05-03
+Última actualización: 2026-05-03 (tarde)
 
 Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 
@@ -26,6 +26,10 @@ Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 | D2-07 | Logging básico Airflow | [airflow-automatizacion-watcher.md](airflow-automatizacion-watcher.md) | `airflow/config/log_config.py` |
 | D2-08 | Persistencia Docker (volúmenes) | [airflow-automatizacion-watcher.md](airflow-automatizacion-watcher.md) | `postgres_data`, `minio_data`, `airflow_metadata` |
 | D8-01 | DAG pipeline RX automatizado | [airflow-automatizacion-watcher.md](airflow-automatizacion-watcher.md) | `salle_rx_pipeline` (parcial: ingesta) |
+| D3-01 | Preprocesado RX: resize, normalización | [pipeline-preprocesado-imagenes.md](pipeline-preprocesado-imagenes.md) | `preprocess_images.py`, 224×224 |
+| D3-02 | Data augmentation (rot, flip, zoom) | [pipeline-preprocesado-imagenes.md](pipeline-preprocesado-imagenes.md) | Solo split train |
+| D3-03 | Split train / validation / test | [pipeline-preprocesado-imagenes.md](pipeline-preprocesado-imagenes.md) | 6399 → 19446 muestras en `features/v1/` |
+| D3-04 | Imagen Spark con Pillow en workers | [pipeline-preprocesado-imagenes.md](pipeline-preprocesado-imagenes.md) | `infra/spark/Dockerfile` |
 
 ---
 

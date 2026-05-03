@@ -57,6 +57,21 @@ python scripts/build_clinical_data.py
 
 Copia RX en `raw/covid19_vs_pneumonia/incoming/train/NORMAL/` (u otra clase). El servicio `salle-watcher` las mueve al árbol y el DAG Airflow `salle_rx_pipeline` procesa la cola. Ver [`incoming/README.md`](raw/covid19_vs_pneumonia/incoming/README.md) y [`airflow/README.md`](../airflow/README.md).
 
+## Dataset procesado para ML (Día 3)
+
+Tras `preprocess_images.py`:
+
+```text
+data/processed/features/v1/
+  train/{sana,neumonia,covid}/*.jpg      # con augmentation
+  validation/{...}/*.jpg                 # solo original
+  test/{...}/*.jpg
+  dataset_index.parquet
+  preprocess_report.json
+```
+
+Ver [`pipeline/README.md`](../pipeline/README.md) y [`docs/preprocess-distributed-justification.md`](../docs/preprocess-distributed-justification.md).
+
 ## Pipeline de imágenes (PySpark)
 
 ```bash

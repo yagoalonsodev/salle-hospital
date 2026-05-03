@@ -1,0 +1,120 @@
+{
+  "features_version": "v1",
+  "image_size": 224,
+  "val_ratio": 0.15,
+  "random_seed": 42,
+  "source_images": 6399,
+  "output_samples": 19446,
+  "counts": [
+    {
+      "split": "test",
+      "label": "covid",
+      "augment_type": "original",
+      "count": 115
+    },
+    {
+      "split": "test",
+      "label": "neumonia",
+      "augment_type": "original",
+      "count": 853
+    },
+    {
+      "split": "test",
+      "label": "sana",
+      "augment_type": "original",
+      "count": 317
+    },
+    {
+      "split": "train",
+      "label": "covid",
+      "augment_type": "flip",
+      "count": 391
+    },
+    {
+      "split": "train",
+      "label": "covid",
+      "augment_type": "original",
+      "count": 391
+    },
+    {
+      "split": "train",
+      "label": "covid",
+      "augment_type": "rotate",
+      "count": 391
+    },
+    {
+      "split": "train",
+      "label": "covid",
+      "augment_type": "zoom",
+      "count": 391
+    },
+    {
+      "split": "train",
+      "label": "neumonia",
+      "augment_type": "flip",
+      "count": 2885
+    },
+    {
+      "split": "train",
+      "label": "neumonia",
+      "augment_type": "original",
+      "count": 2885
+    },
+    {
+      "split": "train",
+      "label": "neumonia",
+      "augment_type": "rotate",
+      "count": 2885
+    },
+    {
+      "split": "train",
+      "label": "neumonia",
+      "augment_type": "zoom",
+      "count": 2885
+    },
+    {
+      "split": "train",
+      "label": "sana",
+      "augment_type": "flip",
+      "count": 1073
+    },
+    {
+      "split": "train",
+      "label": "sana",
+      "augment_type": "original",
+      "count": 1073
+    },
+    {
+      "split": "train",
+      "label": "sana",
+      "augment_type": "rotate",
+      "count": 1073
+    },
+    {
+      "split": "train",
+      "label": "sana",
+      "augment_type": "zoom",
+      "count": 1073
+    },
+    {
+      "split": "validation",
+      "label": "covid",
+      "augment_type": "original",
+      "count": 68
+    },
+    {
+      "split": "validation",
+      "label": "neumonia",
+      "augment_type": "original",
+      "count": 508
+    },
+    {
+      "split": "validation",
+      "label": "sana",
+      "augment_type": "original",
+      "count": 189
+    }
+  ],
+  "processed_at": "2026-05-16T11:25:56.905224+00:00",
+  "justification_doc": "docs/preprocess-distributed-justification.md"
+}
