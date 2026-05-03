@@ -111,7 +111,10 @@ services:
       - salle-net
 
   spark-master:
-    image: apache/spark:3.5.3
+    build:
+      context: ./infra/spark
+      dockerfile: Dockerfile
+    image: practica-tocha-spark:3.5.3
     container_name: salle-spark-master
     user: root
     command: /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
@@ -128,7 +131,7 @@ services:
       - salle-net
 
   spark-worker:
-    image: apache/spark:3.5.3
+    image: practica-tocha-spark:3.5.3
     container_name: salle-spark-worker
     user: root
     command: /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
