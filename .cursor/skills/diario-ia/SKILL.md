@@ -9,6 +9,11 @@ description: >-
 
 # Diario IA — laSalle Health Center
 
+## Seguridad (obligatorio)
+
+- **No** pegar contraseñas, tokens ni contenido de `.env` en entradas del diario.
+- Revisar skill **`salle-seguridad`** antes de guardar entradas que mencionen configuración o despliegue.
+
 ## Objetivo
 
 Documentar el uso de IA (Cursor) según `enunciado.md`: prompts, resultados, correcciones e iteraciones. Es un **entregable obligatorio** de la memoria técnica.
