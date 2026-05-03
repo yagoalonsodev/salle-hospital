@@ -1,5 +1,6 @@
 # Sesión SDD — Preprocesado imágenes Día 3 (2026-05-03)
 
+> Commits: `abec987`…`9c49bd3` — 2026-05-03  
 > Spec: `docs/specs/pipeline-preprocesado-imagenes.md`
 
 ## Entregables
