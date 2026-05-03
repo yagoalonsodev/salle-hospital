@@ -1,6 +1,6 @@
 # Backlog — salle-hospital
 
-Última actualización: 2026-05-03 (tarde)
+Última actualización: 2026-05-04
 
 Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 
@@ -30,6 +30,8 @@ Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 | D3-02 | Data augmentation (rot, flip, zoom) | [pipeline-preprocesado-imagenes.md](pipeline-preprocesado-imagenes.md) | Solo split train |
 | D3-03 | Split train / validation / test | [pipeline-preprocesado-imagenes.md](pipeline-preprocesado-imagenes.md) | 6399 → 19446 muestras en `features/v1/` |
 | D3-04 | Imagen Spark con Pillow en workers | [pipeline-preprocesado-imagenes.md](pipeline-preprocesado-imagenes.md) | `infra/spark/Dockerfile` |
+| D4-01 | Investigación y elección de arquitectura CNN | [ml-arquitectura.md](ml-arquitectura.md) | TL + ResNet50; `docs/ml/arquitectura-rx.md` |
+| D4-02 | Preprocesado y augmentation de RX (ML) | [pipeline-preprocesado-imagenes.md](pipeline-preprocesado-imagenes.md) | Cubierto en Día 3 (`features/v1/`) |
 
 ---
 
@@ -53,8 +55,6 @@ Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 
 | ID | Tarea | Prioridad | Spec |
 |----|-------|-----------|------|
-| D4-01 | Investigación y elección de arquitectura CNN | Alta | `ml-arquitectura.md` |
-| D4-02 | Preprocesado y augmentation de RX | Alta | `ml-preprocesado.md` |
 | D4-03 | Entrenamiento clasificación 3 clases | Alta | `ml-entrenamiento.md` |
 | D4-04 | Export SavedModel + servicio inferencia | Alta | `ml-servicio-inferencia.md` |
 | D4-05 | Matriz de confusión y métricas | Media | `ml-evaluacion.md` |
