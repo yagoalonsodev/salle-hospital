@@ -2,7 +2,7 @@
 
 | Campo | Valor |
 |-------|-------|
-| Fecha commit | 2026-05-05 ~16:30 (+0200) |
+| Commit | `d3b3312` 2026-05-05 16:30 (+0200) |
 | BACKLOG | D5-01, D5-02, D5-03 |
 | Spec | `docs/specs/ml-entrenamiento.md` |
 | Diario | `docs/diario-ia/entradas/2026-05-05.md` |
