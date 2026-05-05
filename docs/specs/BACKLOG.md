@@ -1,6 +1,6 @@
 # Backlog — salle-hospital
 
-Última actualización: 2026-05-04
+Última actualización: 2026-05-05
 
 Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 
@@ -32,6 +32,11 @@ Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 | D3-04 | Imagen Spark con Pillow en workers | [pipeline-preprocesado-imagenes.md](pipeline-preprocesado-imagenes.md) | `infra/spark/Dockerfile` |
 | D4-01 | Investigación y elección de arquitectura CNN | [ml-arquitectura.md](ml-arquitectura.md) | TL + ResNet50; `docs/ml/arquitectura-rx.md` |
 | D4-02 | Preprocesado y augmentation de RX (ML) | [pipeline-preprocesado-imagenes.md](pipeline-preprocesado-imagenes.md) | Cubierto en Día 3 (`features/v1/`) |
+| D4-03 | Entrenamiento clasificación 3 clases | [ml-entrenamiento.md](ml-entrenamiento.md) | `rx_resnet50_v1`, test acc ~94 % post fine-tune |
+| D4-05 | Matriz de confusión y métricas | [ml-entrenamiento.md](ml-entrenamiento.md) | `reports/training_report_v1.json` |
+| D5-01 | Informe comparativa 4 arquitecturas | [ml-entrenamiento.md](ml-entrenamiento.md) | Notebook + `architecture_comparison.json` |
+| D5-02 | Scripts entrenamiento unificados | [ml-entrenamiento.md](ml-entrenamiento.md) | `training_core.py`, `train_*`, `train_compare_architectures.py` |
+| D5-03 | Documentación resultados y evaluación clínica | [ml-entrenamiento.md](ml-entrenamiento.md) | `docs/ml/resultados-entrenamiento-v1.md`, `evaluacion-clinica-v1.md` |
 
 ---
 
@@ -55,9 +60,7 @@ Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 
 | ID | Tarea | Prioridad | Spec |
 |----|-------|-----------|------|
-| D4-03 | Entrenamiento clasificación 3 clases | Alta | `ml-entrenamiento.md` |
-| D4-04 | Export SavedModel + servicio inferencia | Alta | `ml-servicio-inferencia.md` |
-| D4-05 | Matriz de confusión y métricas | Media | `ml-evaluacion.md` |
+| D4-04 | Export SavedModel + servicio inferencia | Alta | `ml-servicio-inferencia.md` (SavedModel pendiente en macOS; `.h5` listo) |
 
 ### Día 6–7 · API e integración
 

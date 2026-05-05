@@ -49,6 +49,18 @@ flowchart LR
 - Docker 24+ y Docker Compose v2
 - (Desarrollo local) Python 3.11+ opcional fuera de contenedores
 
+## Entrenamiento del modelo (Día 5)
+
+```bash
+docker compose build ml
+docker compose run --rm --no-deps \
+  -v ./data:/opt/data -v ./ml/models:/app/models \
+  -e FEATURES_ROOT=/opt/data/processed/features \
+  ml python scripts/train_resnet50.py
+```
+
+Resultados: [`docs/ml/resultados-entrenamiento-v1.md`](docs/ml/resultados-entrenamiento-v1.md).
+
 ## Arranque rápido
 
 ```bash
@@ -113,7 +125,8 @@ Detalle: [`airflow/README.md`](airflow/README.md).
 | 2 (mañana) | Pipeline PySpark, verificación, JPEG, watcher + DAG Airflow | Completado |
 | 3 | Preprocesado RX (resize, aug, train/val/test) en `features/v1/` | Completado |
 | 4 | Arquitectura ML: TL + ResNet50, doc + notebook exploratorio | Completado |
-| 5–10 | Entrenamiento, API, dashboard, memoria | En curso / planificado |
+| 5 | Entrenamiento v1 ResNet50, métricas, `.h5` + SavedModel | Completado |
+| 6–10 | API inferencia, dashboard, memoria | En curso / planificado |
 
 ## Planificación
 

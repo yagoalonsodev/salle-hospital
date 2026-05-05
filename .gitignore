@@ -22,9 +22,14 @@ data/processed/watcher/*
 *.pth
 *.pt
 *.ckpt
-ml/models/*
+ml/models/checkpoints/
+ml/models/savedmodel/
+ml/models/*.h5
+ml/models/*.keras
 !ml/models/.gitkeep
 !ml/models/*.py
+!ml/models/reports/
+!ml/models/reports/**
 
 # Spark / logs
 pipeline/spark-warehouse/
