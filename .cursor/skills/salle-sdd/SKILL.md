@@ -114,7 +114,7 @@ El prefijo `YYYY-MM-DD` debe coincidir con la **fecha del commit** en `main` (`g
 | [2026-05-02-watcher-airflow.md](sessions/2026-05-02-watcher-airflow.md) | `9848819` 14:00 | Watcher RX, DAG Airflow, logging, volúmenes |
 | [2026-05-03-preprocesado-imagenes.md](sessions/2026-05-03-preprocesado-imagenes.md) | `4becbc8`–`9c49bd3` | Resize, aug, split train/val/test (PySpark) |
 | [2026-05-04-arquitectura-ml.md](sessions/2026-05-04-arquitectura-ml.md) | `c95ce67` | Elección ResNet50, notebook exploratorio |
-| [2026-05-05-informe-arquitecturas.md](sessions/2026-05-05-informe-arquitecturas.md) | _(commit Día 5)_ | Comparativa 4 CNN, F1 macro, conclusión memoria |
+| [2026-05-05-informe-arquitecturas.md](sessions/2026-05-05-informe-arquitecturas.md) | `d3b3312` 16:30 | Comparativa 4 CNN, F1 macro, conclusión memoria |
 
 ## Día 5 — Entrenamiento y comparativa ML
 

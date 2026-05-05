@@ -84,7 +84,7 @@ Ver `docs/diario-ia/entradas/2026-05-01.md` como referencia de formato.
 | 2026-05-02 automatización | [sessions/2026-05-02-watcher-airflow.md](sessions/2026-05-02-watcher-airflow.md) |
 | 2026-05-03 preprocesado | [sessions/2026-05-03-preprocesado-imagenes.md](sessions/2026-05-03-preprocesado-imagenes.md) |
 | 2026-05-04 arquitectura ML | `docs/diario-ia/entradas/2026-05-04.md` (`c95ce67`) |
-| 2026-05-05 informe arquitecturas | `docs/diario-ia/entradas/2026-05-05.md` |
+| 2026-05-05 informe arquitecturas | [entradas/2026-05-05.md](../../docs/diario-ia/entradas/2026-05-05.md) (`d3b3312`) |
 
 ## Día 5 — Informe comparativa arquitecturas
 
