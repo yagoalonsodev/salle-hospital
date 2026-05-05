@@ -1,0 +1,353 @@
+{
+  "arch_id": "efficientnetb0",
+  "model_version": "rx_efficientnetb0_v1",
+  "features_dir": "/Users/yagoalonso/Documents/MASTER/practica-tocha/data/processed/features/v1",
+  "trained_at": "2026-05-16T18:33:06.659931+00:00",
+  "hyperparameters": {
+    "batch_size": 16,
+    "head_epochs": 8,
+    "finetune_epochs": 6,
+    "finetune_layers": 30,
+    "finetune": true,
+    "seed": 42,
+    "class_weights": {
+      "0": 3.7075873827791987,
+      "1": 0.5024841132293472,
+      "2": 1.3510406958682821
+    },
+    "total_params": 4053414
+  },
+  "history": {
+    "accuracy": [
+      0.31461256742477417,
+      0.32737410068511963,
+      0.3250747323036194,
+      0.3140377104282379,
+      0.32415497303009033,
+      0.3140951991081238,
+      0.31685444712638855,
+      0.34065303206443787,
+      0.3347321152687073,
+      0.3529547154903412,
+      0.36606115102767944,
+      0.38635319471359253
+    ],
+    "val_accuracy": [
+      0.08888889104127884,
+      0.6640523076057434,
+      0.08888889104127884,
+      0.6640523076057434,
+      0.08888889104127884,
+      0.6941176652908325,
+      0.2849673330783844,
+      0.7137255072593689,
+      0.6562091708183289,
+      0.6653594970703125,
+      0.6640523076057434,
+      0.6640523076057434
+    ],
+    "loss": [
+      1.1350663900375366,
+      1.125797152519226,
+      1.1266992092132568,
+      1.1281378269195557,
+      1.1302543878555298,
+      1.1265915632247925,
+      1.1216157674789429,
+      1.1108298301696777,
+      1.1063286066055298,
+      1.098154067993164,
+      1.0894883871078491,
+      1.084126353263855
+    ],
+    "val_loss": [
+      1.138533115386963,
+      0.9851658344268799,
+      1.1875059604644775,
+      0.9918681383132935,
+      1.1070606708526611,
+      1.088110089302063,
+      1.0730483531951904,
+      1.0187876224517822,
+      1.0053377151489258,
+      0.9323424100875854,
+      0.9144341349601746,
+      0.8951092958450317
+    ]
+  },
+  "phase_boundary_epoch": 6,
+  "metrics_by_split": {
+    "train": {
+      "split": "train",
+      "n_samples": 17396,
+      "accuracy": 0.6632559209013567,
+      "precision_macro": 0.22113615455381785,
+      "recall_macro": 0.3332755632582322,
+      "f1_macro": 0.26586478639568645,
+      "precision_weighted": 0.44008586287958,
+      "recall_weighted": 0.6632559209013567,
+      "f1_weighted": 0.5291008798010269,
+      "per_class": {
+        "covid": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 1564
+        },
+        "neumonia": {
+          "precision": 0.6634084636614536,
+          "recall": 0.9998266897746967,
+          "f1": 0.7975943591870593,
+          "support": 11540
+        },
+        "sana": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 4292
+        }
+      },
+      "classification_report": {
+        "covid": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1-score": 0.0,
+          "support": 1564.0
+        },
+        "neumonia": {
+          "precision": 0.6634084636614536,
+          "recall": 0.9998266897746967,
+          "f1-score": 0.7975943591870593,
+          "support": 11540.0
+        },
+        "sana": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1-score": 0.0,
+          "support": 4292.0
+        },
+        "accuracy": 0.6632559209013567,
+        "macro avg": {
+          "precision": 0.22113615455381785,
+          "recall": 0.3332755632582322,
+          "f1-score": 0.26586478639568645,
+          "support": 17396.0
+        },
+        "weighted avg": {
+          "precision": 0.44008586287958,
+          "recall": 0.6632559209013567,
+          "f1-score": 0.5291008798010269,
+          "support": 17396.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          0,
+          1562,
+          2
+        ],
+        [
+          0,
+          11538,
+          2
+        ],
+        [
+          0,
+          4292,
+          0
+        ]
+      ],
+      "labels": [
+        "covid",
+        "neumonia",
+        "sana"
+      ]
+    },
+    "validation": {
+      "split": "validation",
+      "n_samples": 765,
+      "accuracy": 0.6640522875816993,
+      "precision_macro": 0.22164048865619546,
+      "recall_macro": 0.3333333333333333,
+      "f1_macro": 0.26624737945492666,
+      "precision_weighted": 0.4415426205386168,
+      "recall_weighted": 0.6640522875816993,
+      "f1_weighted": 0.5304065441690303,
+      "per_class": {
+        "covid": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 68
+        },
+        "neumonia": {
+          "precision": 0.6649214659685864,
+          "recall": 1.0,
+          "f1": 0.7987421383647799,
+          "support": 508
+        },
+        "sana": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 189
+        }
+      },
+      "classification_report": {
+        "covid": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1-score": 0.0,
+          "support": 68.0
+        },
+        "neumonia": {
+          "precision": 0.6649214659685864,
+          "recall": 1.0,
+          "f1-score": 0.7987421383647799,
+          "support": 508.0
+        },
+        "sana": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1-score": 0.0,
+          "support": 189.0
+        },
+        "accuracy": 0.6640522875816993,
+        "macro avg": {
+          "precision": 0.22164048865619546,
+          "recall": 0.3333333333333333,
+          "f1-score": 0.26624737945492666,
+          "support": 765.0
+        },
+        "weighted avg": {
+          "precision": 0.4415426205386168,
+          "recall": 0.6640522875816993,
+          "f1-score": 0.5304065441690303,
+          "support": 765.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          0,
+          67,
+          1
+        ],
+        [
+          0,
+          508,
+          0
+        ],
+        [
+          0,
+          189,
+          0
+        ]
+      ],
+      "labels": [
+        "covid",
+        "neumonia",
+        "sana"
+      ]
+    },
+    "test": {
+      "split": "test",
+      "n_samples": 1285,
+      "accuracy": 0.6638132295719844,
+      "precision_macro": 0.2212710765239948,
+      "recall_macro": 0.3333333333333333,
+      "f1_macro": 0.26598066729030245,
+      "precision_weighted": 0.4406480037547881,
+      "recall_weighted": 0.6638132295719844,
+      "f1_weighted": 0.5296844572730615,
+      "per_class": {
+        "covid": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 115
+        },
+        "neumonia": {
+          "precision": 0.6638132295719844,
+          "recall": 1.0,
+          "f1": 0.7979420018709074,
+          "support": 853
+        },
+        "sana": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 317
+        }
+      },
+      "classification_report": {
+        "covid": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1-score": 0.0,
+          "support": 115.0
+        },
+        "neumonia": {
+          "precision": 0.6638132295719844,
+          "recall": 1.0,
+          "f1-score": 0.7979420018709074,
+          "support": 853.0
+        },
+        "sana": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1-score": 0.0,
+          "support": 317.0
+        },
+        "accuracy": 0.6638132295719844,
+        "macro avg": {
+          "precision": 0.2212710765239948,
+          "recall": 0.3333333333333333,
+          "f1-score": 0.26598066729030245,
+          "support": 1285.0
+        },
+        "weighted avg": {
+          "precision": 0.4406480037547881,
+          "recall": 0.6638132295719844,
+          "f1-score": 0.5296844572730615,
+          "support": 1285.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          0,
+          115,
+          0
+        ],
+        [
+          0,
+          853,
+          0
+        ],
+        [
+          0,
+          317,
+          0
+        ]
+      ],
+      "labels": [
+        "covid",
+        "neumonia",
+        "sana"
+      ]
+    }
+  },
+  "fn_neumonia_sana": 0,
+  "summary": {
+    "test": {
+      "accuracy": 0.6638132295719844,
+      "precision_macro": 0.2212710765239948,
+      "recall_macro": 0.3333333333333333,
+      "f1_macro": 0.26598066729030245,
+      "f1_weighted": 0.5296844572730615
+    }
+  },
+  "artifacts": {
+    "h5": "models/rx_efficientnetb0_v1.h5",
+    "report": "models/reports/rx_efficientnetb0_v1/training_report.json"
+  }
+}

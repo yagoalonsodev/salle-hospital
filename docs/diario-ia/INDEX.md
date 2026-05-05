@@ -7,7 +7,8 @@
 | 2026-05-02 | 001–006 Datos, pipeline, verificación | [entradas/2026-05-02.md](entradas/2026-05-02.md) |
 | 2026-05-03 | 001 Preprocesado RX (Día 3) | [entradas/2026-05-03.md](entradas/2026-05-03.md#entrada-001--preprocesado-rx-para-entrenamiento-día-3) |
 | 2026-05-04 | 001 Arquitectura ML ResNet50 (Día 4) | [entradas/2026-05-04.md](entradas/2026-05-04.md#entrada-001--arquitectura-ml-transfer-learning--resnet50-día-4) |
+| 2026-05-05 | 001 Informe comparativa 4 arquitecturas (Día 5) | [entradas/2026-05-05.md](entradas/2026-05-05.md#entrada-001--informe-día-5-comparativa-4-arquitecturas-y-conclusión-memoria) |
 
 ---
 
-_Total entradas: 9_
+_Total entradas: 10_

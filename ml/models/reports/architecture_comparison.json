@@ -1,0 +1,81 @@
+{
+  "generated_at": "2026-05-17T08:24:44.357169+00:00",
+  "models": {
+    "baseline_cnn": {
+      "model_version": "rx_baseline_cnn_v1",
+      "test": {
+        "accuracy": 0.8770428015564202,
+        "precision_macro": 0.8799218619071559,
+        "recall_macro": 0.888476658043403,
+        "f1_macro": 0.8775990250222107,
+        "f1_weighted": 0.8815107491986487
+      },
+      "fn_neumonia_sana": 118,
+      "epochs": {
+        "head": 8,
+        "finetune": 0
+      },
+      "total_params": 93635,
+      "report_path": "models/reports/rx_baseline_cnn_v1/training_report.json"
+    },
+    "resnet50": {
+      "model_version": "rx_resnet50_v1",
+      "test": {
+        "accuracy": 0.9400778210116731,
+        "precision_macro": 0.9368491118290395,
+        "recall_macro": 0.9263314725971395,
+        "f1_macro": 0.9311749820582941,
+        "f1_weighted": 0.9403270453256164
+      },
+      "fn_neumonia_sana": 37,
+      "epochs": {
+        "head": 8,
+        "finetune": 0
+      },
+      "total_params": null,
+      "report_path": null
+    },
+    "efficientnetb0": {
+      "model_version": "rx_efficientnetb0_v1",
+      "test": {
+        "accuracy": 0.6638132295719844,
+        "precision_macro": 0.2212710765239948,
+        "recall_macro": 0.3333333333333333,
+        "f1_macro": 0.26598066729030245,
+        "f1_weighted": 0.5296844572730615
+      },
+      "fn_neumonia_sana": 0,
+      "epochs": {
+        "head": 8,
+        "finetune": 6
+      },
+      "total_params": 4053414,
+      "report_path": "models/reports/rx_efficientnetb0_v1/training_report.json"
+    },
+    "densenet121": {
+      "model_version": "rx_densenet121_v1",
+      "test": {
+        "accuracy": 0.932295719844358,
+        "precision_macro": 0.9198846013032494,
+        "recall_macro": 0.9537185808152134,
+        "f1_macro": 0.9338692654089121,
+        "f1_weighted": 0.934026078394159
+      },
+      "fn_neumonia_sana": 72,
+      "epochs": {
+        "head": 8,
+        "finetune": 6
+      },
+      "total_params": 7040579,
+      "report_path": "models/reports/rx_densenet121_v1/training_report.json"
+    }
+  },
+  "ranking_test_f1_macro": [
+    "densenet121",
+    "resnet50",
+    "baseline_cnn",
+    "efficientnetb0"
+  ],
+  "recommended": "densenet121",
+  "production_model": "resnet50"
+}

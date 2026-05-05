@@ -83,6 +83,18 @@ Ver `docs/diario-ia/entradas/2026-05-01.md` como referencia de formato.
 | 2026-05-02 verificación | [sessions/2026-05-02-verificacion-integracion.md](sessions/2026-05-02-verificacion-integracion.md) |
 | 2026-05-02 automatización | [sessions/2026-05-02-watcher-airflow.md](sessions/2026-05-02-watcher-airflow.md) |
 | 2026-05-03 preprocesado | [sessions/2026-05-03-preprocesado-imagenes.md](sessions/2026-05-03-preprocesado-imagenes.md) |
+| 2026-05-04 arquitectura ML | `docs/diario-ia/entradas/2026-05-04.md` (`c95ce67`) |
+| 2026-05-05 informe arquitecturas | `docs/diario-ia/entradas/2026-05-05.md` |
+
+## Día 5 — Informe comparativa arquitecturas
+
+| Recurso | Ruta |
+|---------|------|
+| Entrada canónica | `docs/diario-ia/entradas/2026-05-05.md` |
+| Spec | `docs/specs/ml-entrenamiento.md` |
+| Notebook | `ml/notebooks/01_exploracion_arquitectura.ipynb` |
+
+Documentar: 4 arquitecturas, F1 macro, FN neumonía→sana, DenseNet vs ResNet50, EfficientNet fallido.
 
 ## Día 3 — Preprocesado para entrenamiento
 
