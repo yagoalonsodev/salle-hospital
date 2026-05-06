@@ -65,6 +65,9 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./infra/postgres/01-init-salle-schema.sql:/docker-entrypoint-initdb.d/01-init-salle-schema.sql:ro
       - ./infra/postgres/init-airflow-db.sql:/docker-entrypoint-initdb.d/02-init-airflow-db.sql:ro
+      - ./infra/postgres/03-patients-display-name.sql:/docker-entrypoint-initdb.d/03-patients-display-name.sql:ro
+      - ./infra/postgres/04-sites-clinical-studies.sql:/docker-entrypoint-initdb.d/04-sites-clinical-studies.sql:ro
+      - ./infra/postgres/05-remove-demo-rows.sql:/docker-entrypoint-initdb.d/05-remove-demo-rows.sql:ro
     healthcheck:
       test:
         [
@@ -177,11 +180,17 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER:-salle}:${POSTGRES_PASSWORD:-salle_secret}@postgres:5432/${POSTGRES_DB:-salle_hospital}
       ML_SERVICE_URL: ${ML_SERVICE_URL:-http://ml:8001}
       MINIO_ENDPOINT: minio:9000
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
       MINIO_BUCKET: ${MINIO_BUCKET:-xray-images}
+      MINIO_SECURE: "false"
+      MODEL_VERSION: rx_resnet50_v1
     depends_on:
       postgres:
         condition: service_healthy
       minio:
+        condition: service_started
+      ml:
         condition: service_started
     healthcheck:
       test:
@@ -207,6 +216,8 @@ services:
       MINIO_ENDPOINT: minio:9000
       MINIO_BUCKET: ${MINIO_BUCKET:-xray-images}
       DATABASE_URL: postgresql://${POSTGRES_USER:-salle}:${POSTGRES_PASSWORD:-salle_secret}@postgres:5432/${POSTGRES_DB:-salle_hospital}
+      MODEL_VERSION: rx_resnet50_v1
+      MODEL_PATH: models/rx_resnet50_v1.h5
     depends_on:
       minio:
         condition: service_started
@@ -214,6 +225,16 @@ services:
         condition: service_healthy
     volumes:
       - ./ml/models:/app/models
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'python -c "import urllib.request; urllib.request.urlopen(''http://127.0.0.1:8001/health'')"',
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
     networks:
       - salle-net
 

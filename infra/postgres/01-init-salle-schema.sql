@@ -5,7 +5,7 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 -- Tipos enumerados
 CREATE TYPE study_label AS ENUM ('sana', 'neumonia', 'covid');
-CREATE TYPE data_split AS ENUM ('train', 'val', 'test');
+CREATE TYPE data_split AS ENUM ('train', 'val', 'test', 'clinical');
 CREATE TYPE pipeline_status AS ENUM ('pending', 'running', 'ok', 'failed');
 CREATE TYPE alert_severity AS ENUM ('info', 'warning', 'critical');
 CREATE TYPE quality_issue_type AS ENUM (
@@ -16,13 +16,24 @@ CREATE TYPE quality_issue_type AS ENUM (
     'other'
 );
 
+-- Centros (catálogo)
+CREATE TABLE sites (
+    site_code  VARCHAR(16) PRIMARY KEY,
+    site_name  VARCHAR(80) NOT NULL,
+    active     BOOLEAN     NOT NULL DEFAULT TRUE
+);
+
+INSERT INTO sites (site_code, site_name) VALUES
+    ('LSHC-01', 'laSalle Health Center');
+
 -- Pacientes (datos anonimizados/simulados)
 CREATE TABLE patients (
-    patient_id   VARCHAR(16)  PRIMARY KEY,
-    sex          CHAR(1)      NOT NULL CHECK (sex IN ('M', 'F', 'X')),
-    age_range    VARCHAR(10)  NOT NULL,
-    site_code    VARCHAR(16)  NOT NULL DEFAULT 'LSHC-01',
-    created_at   TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+    patient_id    VARCHAR(16)  PRIMARY KEY,
+    display_name  VARCHAR(80)  NOT NULL,
+    sex           CHAR(1)      NOT NULL CHECK (sex IN ('M', 'F', 'X')),
+    age_range     VARCHAR(10)  NOT NULL,
+    site_code     VARCHAR(16)  NOT NULL REFERENCES sites (site_code),
+    created_at    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 );
 
 COMMENT ON TABLE patients IS 'Pacientes simulados; sin identificadores reales (RGPD simulado).';
@@ -34,7 +45,7 @@ CREATE TABLE studies (
     file_path         TEXT          NOT NULL,
     minio_object_key  TEXT,
     split             data_split    NOT NULL,
-    label             study_label   NOT NULL,
+    label             study_label,
     source_dataset    VARCHAR(64)   NOT NULL,
     modality          VARCHAR(8)    NOT NULL DEFAULT 'CR',
     body_part         VARCHAR(32)   NOT NULL DEFAULT 'chest',

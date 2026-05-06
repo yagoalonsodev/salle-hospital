@@ -1,6 +1,6 @@
 # Backlog — salle-hospital
 
-Última actualización: 2026-05-05
+Última actualización: 2026-05-06
 
 Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 
@@ -37,6 +37,11 @@ Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 | D5-01 | Informe comparativa 4 arquitecturas | [ml-entrenamiento.md](ml-entrenamiento.md) | Notebook + `architecture_comparison.json` |
 | D5-02 | Scripts entrenamiento unificados | [ml-entrenamiento.md](ml-entrenamiento.md) | `training_core.py`, `train_*`, `train_compare_architectures.py` |
 | D5-03 | Documentación resultados y evaluación clínica | [ml-entrenamiento.md](ml-entrenamiento.md) | `docs/ml/resultados-entrenamiento-v1.md`, `evaluacion-clinica-v1.md` |
+| D6-01 | API Flask + UI web (3 pestañas) | [api-predict.md](api-predict.md) | `/health`, `/metrics`, `/upload`, `/predict`, galería RX |
+| D6-02 | Integración ML + PostgreSQL + MinIO | [api-predict.md](api-predict.md) | `ml:8001`, `predictions`, `uploads/` en MinIO |
+| D6-03 | Health agregado API/BD/MinIO/ML | [api-predict.md](api-predict.md) | `GET /health` |
+| D6-04 | CRUD pacientes + catálogo centros | [api-pacientes.md](api-pacientes.md) | `/api/patients`, `/api/sites`, `display_name` |
+| D6-05 | Resumen y estudios clínicos | [api-predict.md](api-predict.md) | `GET /api/studies/<id>/image`, split `clinical`, UI resumen |
 
 ---
 
@@ -60,15 +65,15 @@ Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 
 | ID | Tarea | Prioridad | Spec |
 |----|-------|-----------|------|
-| D4-04 | Export SavedModel + servicio inferencia | Alta | `ml-servicio-inferencia.md` (SavedModel pendiente en macOS; `.h5` listo) |
+| D4-03 | Entrenamiento clasificación 3 clases | Alta | `ml-entrenamiento.md` |
+| D4-04 | Export SavedModel + servicio inferencia | Alta | `ml-servicio-inferencia.md` |
+| D4-05 | Matriz de confusión y métricas | Media | `ml-evaluacion.md` |
 
 ### Día 6–7 · API e integración
 
 | ID | Tarea | Prioridad | Spec |
 |----|-------|-----------|------|
-| D6-01 | Endpoints pacientes y estudios | Alta | `api-pacientes.md` |
-| D6-02 | Endpoint predicción (proxy a ML + MinIO) | Alta | `api-predict.md` |
-| D6-03 | Estado del pipeline y health agregado | Media | `api-pipeline-status.md` |
+| D6-06 | Estado del pipeline en API | Media | `api-pipeline-status.md` |
 
 ### Día 7–8 · Dashboard y automatización
 

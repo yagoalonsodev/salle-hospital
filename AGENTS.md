@@ -25,7 +25,7 @@ Ruta: `.cursor/skills/`
 - Specs y tareas: `docs/specs/`
 - Diario IA: `docs/diario-ia/`
 
-## Estado rápido (2026-05-01)
+## Estado rápido (2026-05-06)
 
-- **Hecho:** Día 1 — infra Docker, Airflow, Spark, stubs de servicios.
-- **Siguiente:** D2 — esquema BD, datos ejemplo, jobs PySpark ingesta y calidad.
+- **Hecho:** Días 1–6 — infra, pipeline, ML ResNet50, API Flask + UI (pacientes, RX, resumen).
+- **Siguiente:** D7 — dashboard Streamlit; D8 — DAGs ETL/ML batch.

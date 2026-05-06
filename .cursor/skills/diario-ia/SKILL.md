@@ -18,6 +18,17 @@ description: >-
 
 Documentar el uso de IA (Cursor) según `enunciado.md`: prompts, resultados, correcciones e iteraciones. Es un **entregable obligatorio** de la memoria técnica.
 
+## API REST — un solo framework (recordatorio)
+
+Al documentar el Día 6 o cambios en la API:
+
+| Qué | Framework | Dónde |
+|-----|-----------|-------|
+| API REST + UI web | **Flask** (único) | `api/` |
+| Inferencia TensorFlow | FastAPI (microservicio) | `ml/` — no sustituye a la API Flask |
+
+En el diario, no describir «API en FastAPI y Flask» a la vez: la fachada del hospital es **solo Flask** (`salle-api`, puerto 8000). FastAPI aparece solo en el servicio `ml` interno.
+
 ## Cuándo activar el flujo
 
 Al terminar una respuesta **sustantiva** (código, infra, diseño, debugging, specs), **antes de cerrar**:
@@ -85,6 +96,7 @@ Ver `docs/diario-ia/entradas/2026-05-01.md` como referencia de formato.
 | 2026-05-03 preprocesado | [sessions/2026-05-03-preprocesado-imagenes.md](sessions/2026-05-03-preprocesado-imagenes.md) |
 | 2026-05-04 arquitectura ML | `docs/diario-ia/entradas/2026-05-04.md` (`c95ce67`) |
 | 2026-05-05 informe arquitecturas | [entradas/2026-05-05.md](../../docs/diario-ia/entradas/2026-05-05.md) (`d3b3312`) |
+| 2026-05-06 API Flask + UI | [entradas/2026-05-06.md](../../docs/diario-ia/entradas/2026-05-06.md) (commit Día 6) |
 
 ## Día 5 — Informe comparativa arquitecturas
 
@@ -95,6 +107,17 @@ Ver `docs/diario-ia/entradas/2026-05-01.md` como referencia de formato.
 | Notebook | `ml/notebooks/01_exploracion_arquitectura.ipynb` |
 
 Documentar: 4 arquitecturas, F1 macro, FN neumonía→sana, DenseNet vs ResNet50, EfficientNet fallido.
+
+## Día 6 — API Flask + integración IA (hecho)
+
+| Recurso | Ruta |
+|---------|------|
+| Specs | `docs/specs/api-predict.md`, `docs/specs/api-pacientes.md` |
+| Entrada canónica | [entradas/2026-05-06.md](../../docs/diario-ia/entradas/2026-05-06.md) |
+| Sesión SDD | [sessions/2026-05-06-api-flask-ui.md](../salle-sdd/sessions/2026-05-06-api-flask-ui.md) |
+| API | `api/README.md` |
+
+Documentar: Flask único en `api/`, CRUD pacientes, `display_name`, tabla `sites`, subida → MinIO → ML → `predictions`, UI 3 pestañas (galería + resumen con `study_id`), sin placeholders en BD.
 
 ## Día 3 — Preprocesado para entrenamiento
 

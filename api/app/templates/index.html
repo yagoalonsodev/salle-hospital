@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>laSalle Health</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <div>
+          <h1>laSalle Health</h1>
+          <p class="brand-sub">Centro de clasificación de radiografías</p>
+        </div>
+      </div>
+      <span id="health-badge" class="status-pill">Comprobando…</span>
+    </div>
+  </header>
+
+  <div class="shell">
+    <nav class="segmented" role="tablist" aria-label="Secciones">
+      <button type="button" class="segment active" data-panel="patients">Pacientes</button>
+      <button type="button" class="segment" data-panel="upload">Radiografías</button>
+      <button type="button" class="segment" data-panel="metrics">Resumen</button>
+    </nav>
+
+    <!-- Pacientes -->
+    <section id="panel-patients" class="panel active">
+      <div class="panel-header">
+        <div>
+          <h2>Pacientes</h2>
+          <p class="lede">Cada paciente puede tener cero, una o varias radiografías.</p>
+        </div>
+        <button type="button" id="btn-new-patient" class="btn btn-primary">Nuevo paciente</button>
+      </div>
+
+      <div id="patient-form-card" class="card hidden">
+        <h3 id="patient-form-title">Nuevo paciente</h3>
+        <form id="patient-form" class="form-grid">
+          <input type="hidden" id="pf-mode" value="create" />
+          <label class="field field-wide">
+            <span>Nombre</span>
+            <input type="text" id="pf-name" maxlength="80" required autocomplete="name" />
+          </label>
+          <label class="field">
+            <span>Sexo</span>
+            <select id="pf-sex">
+              <option value="X">No especificado</option>
+              <option value="M">Masculino</option>
+              <option value="F">Femenino</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Rango de edad</span>
+            <input type="text" id="pf-age" maxlength="10" required />
+          </label>
+          <label class="field">
+            <span>Centro</span>
+            <select id="pf-site" required>
+              <option value="">— Selecciona centro —</option>
+            </select>
+          </label>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="button" id="btn-cancel-patient" class="btn btn-ghost">Cancelar</button>
+          </div>
+        </form>
+        <p id="patient-form-error" class="banner banner-error hidden"></p>
+      </div>
+
+      <div class="card">
+        <div id="patients-loading" class="hint">Cargando pacientes…</div>
+        <div id="patients-empty" class="empty hidden">
+          <p>No hay pacientes registrados.</p>
+          <p class="hint">Crea uno para asociar radiografías después.</p>
+        </div>
+        <ul id="patients-list" class="patient-list"></ul>
+      </div>
+
+      <div id="patient-detail" class="card hidden">
+        <div class="panel-header">
+          <h3 id="detail-title">Detalle</h3>
+          <div class="btn-row">
+            <button type="button" id="btn-upload-rx" class="btn btn-primary">Subir radiografía</button>
+            <button type="button" id="btn-edit-patient" class="btn btn-secondary">Editar</button>
+            <button type="button" id="btn-delete-patient" class="btn btn-danger">Eliminar</button>
+          </div>
+        </div>
+        <dl id="detail-meta" class="meta-grid"></dl>
+        <h4>Radiografías <span id="detail-study-count" class="chip">0</span></h4>
+        <ul id="detail-studies" class="study-list"></ul>
+      </div>
+    </section>
+
+    <!-- Radiografías -->
+    <section id="panel-upload" class="panel">
+      <div class="panel-header">
+        <div>
+          <h2>Analizar radiografía</h2>
+          <p class="lede">Selecciona un paciente y sube una RX. Inferencia automática con ResNet50.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <form id="upload-form">
+          <label class="field">
+            <span>Paciente</span>
+            <select id="upload-patient-id" required>
+              <option value="">— Selecciona un paciente —</option>
+            </select>
+          </label>
+
+          <p id="upload-hint" class="banner banner-info hidden" role="status"></p>
+
+          <div id="drop-zone" class="drop-zone" tabindex="0">
+            <div class="drop-icon" aria-hidden="true">+</div>
+            <p>Arrastra una imagen o toca para elegir</p>
+            <p class="hint">JPG o PNG · máx. 10 MB</p>
+            <input type="file" id="file-input" accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
+          </div>
+
+          <div id="preview-wrap" class="preview-wrap hidden">
+            <img id="preview" alt="Vista previa" />
+          </div>
+
+          <button type="submit" id="submit-btn" class="btn btn-primary btn-block">Analizar</button>
+        </form>
+        <p id="upload-error" class="banner banner-error hidden"></p>
+        <div id="result" class="result-card hidden"></div>
+        <p class="disclaimer">Soporte a la decisión clínica. No sustituye el juicio médico.</p>
+      </div>
+
+      <div id="patient-rx-panel" class="card hidden">
+        <h3>Radiografías de <span id="upload-patient-label"></span></h3>
+        <p id="patient-rx-empty" class="hint hidden">Este paciente aún no tiene radiografías.</p>
+        <ul id="patient-rx-gallery" class="rx-gallery"></ul>
+      </div>
+    </section>
+
+    <!-- Resumen -->
+    <section id="panel-metrics" class="panel">
+      <div class="panel-header">
+        <div>
+          <h2>Resumen del sistema</h2>
+          <p class="lede">Métricas agregadas de predicciones.</p>
+        </div>
+      </div>
+      <div class="metrics-grid" id="metrics-panel"></div>
+      <div class="card">
+        <h3>Radiografías analizadas</h3>
+        <p id="summary-empty" class="hint hidden">Aún no hay radiografías analizadas por la API.</p>
+        <ul id="summary-list" class="summary-list"></ul>
+      </div>
+    </section>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/patients.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
