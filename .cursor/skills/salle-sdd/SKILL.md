@@ -34,6 +34,68 @@ Antes de planificar o implementar, lee en este orden:
 
 No improvises arquitectura que contradiga estos documentos.
 
+## API REST — un solo framework (obligatorio)
+
+| Capa | Framework | Ruta | Notas |
+|------|-----------|------|-------|
+| **API REST del hospital** | **Flask** | `api/` | Única opción para `/health`, `/metrics`, `/predict`, `/upload` y UI web |
+| Servicio ML (inferencia) | FastAPI | `ml/` | Microservicio interno; la API Flask lo llama por HTTP (`ML_SERVICE_URL`) |
+
+**Reglas para la IA y nuevas specs:**
+
+- **No mezclar** FastAPI y Flask en `api/`. Si `docs/architecture.md` menciona FastAPI para la API, prevalece esta convención (Flask en Día 6).
+- No crear un segundo stack HTTP en `api/` (sin routers FastAPI paralelos, sin `uvicorn` en el contenedor `salle-api`).
+- Nuevos endpoints del encargo → ampliar blueprints Flask en `api/app/routes/`.
+- El dashboard y la memoria consumen la API Flask en el puerto **8000**.
+
+## Separación de capas — no mezclar back y front (obligatorio)
+
+Cada capa tiene **una responsabilidad**. Las reglas de negocio viven en **servicios** (y validadores de entrada); la **vista** solo presenta y llama a la API; las **rutas** solo traducen HTTP.
+
+### Mapa por capa (`api/`)
+
+| Capa | Carpeta / archivo | Qué hace | Qué **no** debe hacer |
+|------|-------------------|----------|------------------------|
+| **Vista (front)** | `templates/`, `static/css/`, `static/js/` | HTML, estilos, `fetch` a `/upload`, `/metrics`, `/health` | SQL, MinIO, TensorFlow, generar `study_id`, reglas clínicas, secretos |
+| **Controlador HTTP** | `routes/*.py` | Recibir request, delegar, `jsonify` / `render_template`, códigos HTTP | Queries SQL, subir a MinIO, orquestar inferencia, reglas de negocio |
+| **Aplicación / casos de uso** | `services/pipeline.py`, `services/*_client.py` | Orquestar flujo (validar → MinIO → ML → BD), llamar infra | Renderizar HTML, parsear formularios en profundidad |
+| **Validación de entrada** | `validators.py` | Formato archivo, tamaño, magic bytes, `patient_id` | Persistencia, llamadas HTTP a ML |
+| **Persistencia** | `db.py` | SQL, `study_id`, inserts en `studies` / `predictions` | Decidir UX, devolver HTML |
+| **Configuración** | `config.py`, `.env` | URLs, límites, credenciales vía env | Lógica de negocio |
+| **Arranque** | `__init__.py`, `wsgi.py` | Factory Flask, registrar blueprints | Lógica de dominio |
+
+### Otras piezas del monorepo
+
+| Módulo | Vista | Back / negocio |
+|--------|-------|----------------|
+| `dashboard/` | Streamlit (UI) | Solo consume `API_URL`; sin duplicar reglas de `api/` |
+| `ml/` | — | Inferencia en `inference.py`; sin HTML |
+| `pipeline/` | — | Jobs Spark; sin UI embebida |
+
+### Reglas de negocio — dónde van
+
+Documentar en la **spec** (`docs/specs/`) y codificar en **`services/`** (o `validators.py` si es restricción de input):
+
+- Orden del flujo subida RX (MinIO → estudio → ML → predicción).
+- Generación de `study_id` / `patient_id` por defecto.
+- Estudios API: `split=clinical`, `label=NULL`; predicción solo en `predictions` (`source_dataset=api_upload`).
+- Criterios clínicos de métricas (FN neumonía→sana) — en ML/docs, no en JS.
+
+### Anti‑patrones (rechazar en PR / generación IA)
+
+- SQL o `psycopg2` dentro de `routes/` o `static/js/`.
+- Lógica de inferencia o MinIO en `templates/` o `app.js`.
+- Blueprint que devuelve HTML **y** implementa el caso de uso completo (excepto `routes/web.py` → solo `render_template`).
+- Reglas de negocio duplicadas en front y back (el front solo valida UX: tipo/tamaño; el back **revalida siempre**).
+- Mezclar FastAPI en `api/` con Flask en la misma carpeta.
+
+### Checklist antes de cerrar una feature API
+
+1. ¿La spec separa requisitos funcionales (negocio) de interfaz (vista)?
+2. ¿`routes/` es un controlador fino (pocas líneas) y delega en `services/`?
+3. ¿`static/js/` solo consume JSON de la API?
+4. ¿Cambio de regla de negocio toca solo `services/` o `validators.py`?
+
 ## Flujo SDD por componente
 
 ```
@@ -115,6 +177,30 @@ El prefijo `YYYY-MM-DD` debe coincidir con la **fecha del commit** en `main` (`g
 | [2026-05-03-preprocesado-imagenes.md](sessions/2026-05-03-preprocesado-imagenes.md) | `4becbc8`–`9c49bd3` | Resize, aug, split train/val/test (PySpark) |
 | [2026-05-04-arquitectura-ml.md](sessions/2026-05-04-arquitectura-ml.md) | `c95ce67` | Elección ResNet50, notebook exploratorio |
 | [2026-05-05-informe-arquitecturas.md](sessions/2026-05-05-informe-arquitecturas.md) | `d3b3312` 16:30 | Comparativa 4 CNN, F1 macro, conclusión memoria |
+| [2026-05-06-api-flask-ui.md](sessions/2026-05-06-api-flask-ui.md) | _(commit Día 6)_ | Flask, CRUD pacientes, UI 3 pestañas, MinIO |
+
+## Día 6 — API Flask + integración ML (hecho)
+
+| Recurso | Ruta |
+|---------|------|
+| Specs | `docs/specs/api-predict.md`, `docs/specs/api-pacientes.md` |
+| API (solo Flask) | `api/app/` — Gunicorn `app.wsgi:app` |
+| Vista | `templates/index.html`, `static/js/app.js`, `static/js/patients.js` |
+| Rutas | `routes/upload.py`, `patients.py`, `metrics.py`, `studies.py`, `sites.py`, `web.py` |
+| Casos de uso | `services/pipeline.py`, `services/patients.py` |
+| Persistencia | `db.py`, `repositories/patients.py`, `repositories/sites.py` |
+| Cliente ML | `services/ml_client.py` → `http://ml:8001` |
+| Inferencia | `ml/app/inference.py`, `ml/app/main.py` (FastAPI interno) |
+| Migraciones | `infra/postgres/03-05-*.sql` |
+
+```bash
+docker compose up -d --build postgres minio ml api
+# Web: http://localhost:8000/
+```
+
+**UI:** Pacientes (CRUD) · Radiografías (subida + galería MinIO) · Resumen (`study_id` + predicción).
+
+**Siguiente:** D7 dashboard Streamlit (`dashboard-vista-clinica.md`).
 
 ## Día 5 — Entrenamiento y comparativa ML
 
