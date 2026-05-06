@@ -2,7 +2,7 @@
 
 | Campo | Valor |
 |-------|-------|
-| Commit | _(rellenar tras `git log -1`)_ |
+| Commit | `cf629cb` 2026-05-06 18:00 (+0200) |
 | BACKLOG | D6-01 … D6-05 |
 | Specs | `docs/specs/api-predict.md`, `docs/specs/api-pacientes.md` |
 | Diario | `docs/diario-ia/entradas/2026-05-06.md` |
