@@ -177,7 +177,7 @@ El prefijo `YYYY-MM-DD` debe coincidir con la **fecha del commit** en `main` (`g
 | [2026-05-03-preprocesado-imagenes.md](sessions/2026-05-03-preprocesado-imagenes.md) | `4becbc8`–`9c49bd3` | Resize, aug, split train/val/test (PySpark) |
 | [2026-05-04-arquitectura-ml.md](sessions/2026-05-04-arquitectura-ml.md) | `c95ce67` | Elección ResNet50, notebook exploratorio |
 | [2026-05-05-informe-arquitecturas.md](sessions/2026-05-05-informe-arquitecturas.md) | `d3b3312` 16:30 | Comparativa 4 CNN, F1 macro, conclusión memoria |
-| [2026-05-06-api-flask-ui.md](sessions/2026-05-06-api-flask-ui.md) | _(commit Día 6)_ | Flask, CRUD pacientes, UI 3 pestañas, MinIO |
+| [2026-05-06-api-flask-ui.md](sessions/2026-05-06-api-flask-ui.md) | `cf629cb` 18:00 | Flask, CRUD pacientes, UI 3 pestañas, MinIO |
 
 ## Día 6 — API Flask + integración ML (hecho)
 
