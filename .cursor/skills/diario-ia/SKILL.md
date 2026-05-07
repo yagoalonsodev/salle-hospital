@@ -119,6 +119,16 @@ Documentar: 4 arquitecturas, F1 macro, FN neumonía→sana, DenseNet vs ResNet50
 
 Documentar: Flask único en `api/`, CRUD pacientes, `display_name`, tabla `sites`, subida → MinIO → ML → `predictions`, UI 3 pestañas (galería + resumen con `study_id`), sin placeholders en BD.
 
+## Día 7 — Dashboard y robustez (hecho)
+
+| Recurso | Ruta |
+|---------|------|
+| Spec | `docs/specs/dashboard-vista-clinica.md` |
+| Entrada | [entradas/2026-05-07.md](../../docs/diario-ia/entradas/2026-05-07.md) (`5497ef1`) |
+| Dashboard | http://localhost:8501 |
+
+Documentar: Streamlit, gráficas % clase, matriz confusión, imágenes, alertas, pipeline, logging, retry ML.
+
 ## Día 3 — Preprocesado para entrenamiento
 
 | Recurso | Ruta |

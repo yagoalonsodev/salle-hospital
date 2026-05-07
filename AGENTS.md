@@ -25,7 +25,7 @@ Ruta: `.cursor/skills/`
 - Specs y tareas: `docs/specs/`
 - Diario IA: `docs/diario-ia/`
 
-## Estado rápido (2026-05-06)
+## Estado rápido (2026-05-07)
 
-- **Hecho:** Días 1–6 — infra, pipeline, ML ResNet50, API Flask + UI (pacientes, RX, resumen).
-- **Siguiente:** D7 — dashboard Streamlit; D8 — DAGs ETL/ML batch.
+- **Hecho:** Días 1–7 — infra, pipeline, ML, API Flask + UI, dashboard Streamlit.
+- **Siguiente:** D8 — DAGs ETL/ML batch; D9 — memoria, ética, presentación.

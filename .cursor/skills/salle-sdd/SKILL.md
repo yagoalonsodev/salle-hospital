@@ -178,6 +178,7 @@ El prefijo `YYYY-MM-DD` debe coincidir con la **fecha del commit** en `main` (`g
 | [2026-05-04-arquitectura-ml.md](sessions/2026-05-04-arquitectura-ml.md) | `c95ce67` | Elección ResNet50, notebook exploratorio |
 | [2026-05-05-informe-arquitecturas.md](sessions/2026-05-05-informe-arquitecturas.md) | `d3b3312` 16:30 | Comparativa 4 CNN, F1 macro, conclusión memoria |
 | [2026-05-06-api-flask-ui.md](sessions/2026-05-06-api-flask-ui.md) | `cf629cb` 18:00 | Flask, CRUD pacientes, UI 3 pestañas, MinIO |
+| [2026-05-07-dashboard-robustez.md](sessions/2026-05-07-dashboard-robustez.md) | `5497ef1` 18:00 | Streamlit, `/api/dashboard`, logging, retry, alertas |
 
 ## Día 6 — API Flask + integración ML (hecho)
 
@@ -200,7 +201,20 @@ docker compose up -d --build postgres minio ml api
 
 **UI:** Pacientes (CRUD) · Radiografías (subida + galería MinIO) · Resumen (`study_id` + predicción).
 
-**Siguiente:** D7 dashboard Streamlit (`dashboard-vista-clinica.md`).
+**Siguiente:** D8 DAGs ETL/ML batch en Airflow.
+
+## Día 7 — Dashboard Streamlit + robustez (hecho)
+
+| Recurso | Ruta |
+|---------|------|
+| Spec | `docs/specs/dashboard-vista-clinica.md` |
+| Dashboard | `dashboard/app/main.py` — http://localhost:8501 |
+| API datos | `GET /api/dashboard` |
+| Alertas | `alerts` + creación en fallos inferencia/pipeline |
+
+```bash
+docker compose up -d --build api dashboard
+```
 
 ## Día 5 — Entrenamiento y comparativa ML
 
