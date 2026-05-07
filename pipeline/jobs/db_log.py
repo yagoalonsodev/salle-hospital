@@ -77,6 +77,18 @@ def finish_run(
                     run_id,
                 ),
             )
+            if status == "failed":
+                cur.execute(
+                    """
+                    INSERT INTO alerts (run_id, severity, title, message)
+                    VALUES (%s, 'critical', %s, %s)
+                    """,
+                    (
+                        run_id,
+                        f"Pipeline fallido: {run_id}",
+                        (error_message or "Error sin detalle")[:2000],
+                    ),
+                )
 
     _safe_db(_do)
 

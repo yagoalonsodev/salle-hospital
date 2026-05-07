@@ -2,12 +2,16 @@
 
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 from app import db
+from app.repositories import alerts as alerts_repo
 from app.services import minio_store, ml_client, patients as patient_service
 from app.validators import ValidatedImage
 from app.validators_patients import validate_patient_id_required
+
+log = logging.getLogger(__name__)
 
 
 def run_inference_on_image(validated: ValidatedImage) -> dict[str, Any]:
@@ -53,8 +57,23 @@ def process_upload(
         minio_object_key=obj_key,
     )
 
-    ml_result = run_inference_on_image(validated)
+    try:
+        ml_result = run_inference_on_image(validated)
+    except Exception as exc:
+        log.exception("Inferencia fallida study_id=%s", study_id)
+        alerts_repo.create_alert(
+            title="Error de inferencia",
+            message=f"Estudio {study_id}: {exc}",
+            severity="critical",
+        )
+        raise
+
     prediction_id = persist_prediction(study_id, ml_result)
+    log.info(
+        "Upload OK study_id=%s label=%s",
+        study_id,
+        ml_result.get("predicted_label"),
+    )
 
     return {
         "study_id": study_id,
