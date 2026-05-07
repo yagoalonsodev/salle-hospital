@@ -1,0 +1,23 @@
+# Dashboard Streamlit — laSalle Health
+
+Visualización operativa (Día 7): métricas IA, imágenes, pipeline, alertas y calidad.
+
+## Arranque
+
+```bash
+docker compose up -d --build postgres minio ml api dashboard
+```
+
+- **Dashboard:** http://localhost:8501
+- **API:** http://localhost:8000
+
+## Pestañas
+
+| Pestaña | Contenido |
+|---------|-----------|
+| IA y clases | % predicciones producción, matriz confusión test |
+| Imágenes | Galería estudios en MinIO |
+| Pipeline y calidad | `pipeline_runs`, incidencias de calidad |
+| Alertas | Tabla `alerts`, acuse de lectura |
+
+Datos vía `GET /api/dashboard`.

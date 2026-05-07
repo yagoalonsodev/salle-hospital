@@ -185,6 +185,10 @@ services:
       MINIO_BUCKET: ${MINIO_BUCKET:-xray-images}
       MINIO_SECURE: "false"
       MODEL_VERSION: rx_resnet50_v1
+      ML_REPORT_PATH: /app/ml_reports/training_report_v1.json
+      LOG_LEVEL: INFO
+    volumes:
+      - ./ml/models/reports:/app/ml_reports:ro
     depends_on:
       postgres:
         condition: service_healthy
@@ -250,6 +254,18 @@ services:
     depends_on:
       api:
         condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python3",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8501/_stcore/health', timeout=5)",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 25s
     networks:
       - salle-net
 

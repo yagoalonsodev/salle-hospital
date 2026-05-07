@@ -1,6 +1,6 @@
 # Backlog — salle-hospital
 
-Última actualización: 2026-05-06
+Última actualización: 2026-05-07
 
 Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 
@@ -42,6 +42,10 @@ Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 | D6-03 | Health agregado API/BD/MinIO/ML | [api-predict.md](api-predict.md) | `GET /health` |
 | D6-04 | CRUD pacientes + catálogo centros | [api-pacientes.md](api-pacientes.md) | `/api/patients`, `/api/sites`, `display_name` |
 | D6-05 | Resumen y estudios clínicos | [api-predict.md](api-predict.md) | `GET /api/studies/<id>/image`, split `clinical`, UI resumen |
+| D7-01 | Dashboard Streamlit | [dashboard-vista-clinica.md](dashboard-vista-clinica.md) | Métricas, gráficas, imágenes, matriz confusión |
+| D7-02 | Alertas en dashboard | [dashboard-vista-clinica.md](dashboard-vista-clinica.md) | Tabla `alerts`, fallos pipeline/inferencia |
+| D7-03 | Robustez API | [dashboard-vista-clinica.md](dashboard-vista-clinica.md) | Logging, retry ML, healthchecks |
+| D7-04 | Estado pipeline en dashboard | [dashboard-vista-clinica.md](dashboard-vista-clinica.md) | `GET /api/dashboard`, `pipeline_runs` |
 
 ---
 
@@ -79,8 +83,6 @@ Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 
 | ID | Tarea | Prioridad | Spec |
 |----|-------|-----------|------|
-| D7-01 | Dashboard Streamlit (métricas, matriz confusión) | Alta | `dashboard-vista-clinica.md` |
-| D7-02 | Alertas simuladas en dashboard | Media | `dashboard-alertas.md` |
 | D8-01 | DAG Airflow: ingesta diaria | Alta | Cubierto por `salle_rx_pipeline`; ampliar en `airflow-dag-ingesta.md` |
 | D8-02 | DAG Airflow: ETL Spark | Alta | `airflow-dag-etl.md` |
 | D8-03 | DAG Airflow: inferencia batch ML | Alta | `airflow-dag-ml.md` |

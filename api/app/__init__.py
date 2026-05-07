@@ -2,7 +2,20 @@
 
 from flask import Flask
 
-from app.routes import health, metrics, patients, predict, sites, studies, upload, web
+from app.logging_config import setup_logging
+from app.routes import (
+    dashboard,
+    health,
+    metrics,
+    patients,
+    predict,
+    sites,
+    studies,
+    upload,
+    web,
+)
+
+setup_logging()
 
 
 def create_app() -> Flask:
@@ -21,6 +34,7 @@ def create_app() -> Flask:
     app.register_blueprint(patients.bp)
     app.register_blueprint(sites.bp)
     app.register_blueprint(studies.bp)
+    app.register_blueprint(dashboard.bp)
 
     @app.errorhandler(413)
     def too_large(_e):
