@@ -26,7 +26,11 @@ from pyspark.sql.types import (
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, "/opt/scripts")
+from db_alerts import alert_quality_batch  # noqa: E402
 from db_log import finish_run, log_event, log_quality_issues, start_run  # noqa: E402
+from salle_logging import setup_logging  # noqa: E402
+
+log = setup_logging("ingest_validate_images")
 
 try:
     from env_utils import minio_config  # noqa: E402
@@ -108,13 +112,29 @@ def _load_manifest(spark: SparkSession):
 def main() -> None:
     run_id = os.environ.get(
         "PIPELINE_RUN_ID",
-        f"RUN-{datetime.now(timezone.utc).strftime('%Y%m%d-%H%M')}-IMG",
+        f"RUN-{datetime.now(timezone.utc).strftime('%Y%m%d-%H%M%S')}-IMG",
     )
     job_name = "ingest_validate_images"
 
     PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
     start_run(run_id, job_name)
 
+    try:
+        _run_ingest(run_id)
+    except Exception as exc:
+        log.exception("Ingesta fallida: %s", exc)
+        finish_run(
+            run_id,
+            status="failed",
+            records_in=0,
+            records_out=0,
+            records_failed=0,
+            error_message=str(exc)[:2000],
+        )
+        raise
+
+
+def _run_ingest(run_id: str) -> None:
     spark = _spark()
     spark.sparkContext.setLogLevel("WARN")
 
@@ -222,13 +242,16 @@ def main() -> None:
     records_out = unique_valid.count()
     n_invalid = invalid.count()
     n_dup = duplicates.count()
+    n_corrupt = invalid.filter(~F.col("is_valid_jpg")).count()
+    n_incomplete = invalid.filter(F.col("is_valid_jpg") & ~F.col("path_ok")).count()
 
     report = {
         "run_id": run_id,
         "total_scanned": total_in,
         "valid_unique": records_out,
         "rejected": n_invalid + n_dup,
-        "invalid_corrupt": n_invalid,
+        "invalid_corrupt": n_corrupt,
+        "invalid_incomplete": n_incomplete,
         "duplicates_removed": n_dup,
         "processed_at": datetime.now(timezone.utc).isoformat(),
     }
@@ -251,6 +274,12 @@ def main() -> None:
         for r in duplicates.select("file_path").limit(200).collect()
     ]
     log_quality_issues(run_id, sample_invalid + sample_dup)
+    alert_quality_batch(
+        run_id,
+        corrupt=n_corrupt,
+        incomplete=n_incomplete,
+        duplicate=n_dup,
+    )
 
     finish_run(
         run_id,
@@ -260,7 +289,7 @@ def main() -> None:
         records_failed=n_invalid + n_dup,
     )
     log_event(run_id, "EVT-ING01", "ingesta_imagenes", "ok", records_out, json.dumps(report)[:500])
-
+    log.info("Ingesta OK: %s", json.dumps(report))
     print(json.dumps(report, indent=2))
     spark.stop()
 

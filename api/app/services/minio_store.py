@@ -9,6 +9,7 @@ from minio import Minio
 from minio.error import S3Error
 
 from app.config import UPLOAD_PREFIX, minio_settings
+from app.services.retry_util import retry_call
 
 
 def _client() -> Minio:
@@ -42,13 +43,16 @@ def upload_bytes(
     bucket = cfg["bucket"]
     if not client.bucket_exists(bucket):
         client.make_bucket(bucket)
-    client.put_object(
-        bucket,
-        object_key,
-        io.BytesIO(data),
-        length=len(data),
-        content_type=content_type,
-    )
+    def _put() -> None:
+        client.put_object(
+            bucket,
+            object_key,
+            io.BytesIO(data),
+            length=len(data),
+            content_type=content_type,
+        )
+
+    retry_call(_put, attempts=3, exceptions=(S3Error, OSError, ConnectionError))
     return object_key
 
 
