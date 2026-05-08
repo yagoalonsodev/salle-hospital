@@ -9,6 +9,9 @@ from fastapi import FastAPI, File, HTTPException, UploadFile
 from PIL import Image, UnidentifiedImageError
 
 from app.inference import load_model, model_status, predict_pil
+from app.logging_config import setup_logging
+
+setup_logging()
 
 
 @asynccontextmanager

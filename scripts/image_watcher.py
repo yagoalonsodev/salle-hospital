@@ -3,7 +3,6 @@
 
 from __future__ import annotations
 
-import logging
 import os
 import re
 import shutil
@@ -15,14 +14,12 @@ from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from db_alerts import create_alert  # noqa: E402
+from salle_logging import setup_logging  # noqa: E402
 from watcher_state import log_event, set_pending  # noqa: E402
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="[%(asctime)s] %(levelname)s watcher — %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-)
-log = logging.getLogger("image_watcher")
+log = setup_logging("image_watcher")
+HEARTBEAT = Path(os.environ.get("WATCHER_HEARTBEAT", "/tmp/watcher-heartbeat"))
 
 DATA_ROOT = Path(os.environ.get("DATA_ROOT", "/opt/data"))
 INCOMING_ROOT = Path(
@@ -91,6 +88,11 @@ class IncomingHandler(FileSystemEventHandler):
             split, folder, filename = "train", "NORMAL", parts[0]
         else:
             log.warning("Ruta incoming no válida (use split/CLASE/archivo.jpg): %s", rel)
+            create_alert(
+                title="Watcher: ruta incoming inválida",
+                message=str(rel)[:2000],
+                severity="warning",
+            )
             return
 
         dest_dir = RAW_ROOT / split / folder
@@ -124,6 +126,7 @@ def main() -> None:
     try:
         while True:
             handler.flush_ready()
+            HEARTBEAT.write_text(str(time.time()), encoding="utf-8")
             time.sleep(0.5)
     except KeyboardInterrupt:
         observer.stop()

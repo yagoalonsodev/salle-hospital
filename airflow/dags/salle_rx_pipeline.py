@@ -21,13 +21,19 @@ DATA_ROOT = Path(os.environ.get("DATA_ROOT", "/opt/data"))
 PENDING_FLAG = DATA_ROOT / "processed/watcher/pending.flag"
 SCRIPTS = Path(os.environ.get("AIRFLOW_SCRIPTS_DIR", "/opt/scripts"))
 
+if str(SCRIPTS) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS))
+
+from airflow_callbacks import record_task_failure  # noqa: E402
+
 default_args = {
     "owner": "salle-hospital",
     "depends_on_past": False,
     "email_on_failure": False,
     "email_on_retry": False,
-    "retries": 1,
+    "retries": 2,
     "retry_delay": timedelta(minutes=2),
+    "on_failure_callback": record_task_failure,
 }
 
 
@@ -69,6 +75,21 @@ def run_spark_ingest(**_context) -> None:
         raise RuntimeError(f"spark ingest falló con código {result.returncode}")
 
 
+def run_data_quality_audit(**_context) -> None:
+    script = SCRIPTS / "data_quality_audit.py"
+    result = subprocess.run(
+        [sys.executable, str(script)],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    print(result.stdout)
+    if result.stderr:
+        print(result.stderr, file=sys.stderr)
+    if result.returncode != 0:
+        raise RuntimeError(f"auditoría calidad falló: {result.returncode}")
+
+
 with DAG(
     dag_id="salle_rx_pipeline",
     default_args=default_args,
@@ -98,4 +119,10 @@ with DAG(
         python_callable=clear_pending,
     )
 
-    gate >> rebuild_manifest >> spark_ingest >> clear_flag
+    quality_audit = PythonOperator(
+        task_id="data_quality_audit",
+        python_callable=run_data_quality_audit,
+        trigger_rule="all_done",
+    )
+
+    gate >> rebuild_manifest >> spark_ingest >> clear_flag >> quality_audit

@@ -1,6 +1,6 @@
 # Backlog — salle-hospital
 
-Última actualización: 2026-05-07
+Última actualización: 2026-05-08
 
 Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 
@@ -46,6 +46,10 @@ Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 | D7-02 | Alertas en dashboard | [dashboard-vista-clinica.md](dashboard-vista-clinica.md) | Tabla `alerts`, fallos pipeline/inferencia |
 | D7-03 | Robustez API | [dashboard-vista-clinica.md](dashboard-vista-clinica.md) | Logging, retry ML, healthchecks |
 | D7-04 | Estado pipeline en dashboard | [dashboard-vista-clinica.md](dashboard-vista-clinica.md) | `GET /api/dashboard`, `pipeline_runs` |
+| D8M-01 | Logging centralizado (API, ML, scripts, ingesta) | [monitorizacion-calidad-d8.md](monitorizacion-calidad-d8.md) | `salle_logging.py`, `logging_config.py` |
+| D8M-02 | Validación imágenes corruptas/incompletas + auditoría BD | [monitorizacion-calidad-d8.md](monitorizacion-calidad-d8.md) | Spark + `data_quality_audit.py` |
+| D8M-03 | Alertas pipeline, inferencia y calidad | [monitorizacion-calidad-d8.md](monitorizacion-calidad-d8.md) | `db_alerts`, Airflow callback, dashboard |
+| D8M-04 | Healthchecks Docker ampliados + retry MinIO | [monitorizacion-calidad-d8.md](monitorizacion-calidad-d8.md) | minio, spark, watcher, pipeline |
 
 ---
 
@@ -79,14 +83,13 @@ Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 |----|-------|-----------|------|
 | D6-06 | Estado del pipeline en API | Media | `api-pipeline-status.md` |
 
-### Día 7–8 · Dashboard y automatización
+### Día 8+ · Airflow (ETL / ML / informes)
 
 | ID | Tarea | Prioridad | Spec |
 |----|-------|-----------|------|
-| D8-01 | DAG Airflow: ingesta diaria | Alta | Cubierto por `salle_rx_pipeline`; ampliar en `airflow-dag-ingesta.md` |
-| D8-02 | DAG Airflow: ETL Spark | Alta | `airflow-dag-etl.md` |
-| D8-03 | DAG Airflow: inferencia batch ML | Alta | `airflow-dag-ml.md` |
-| D8-04 | DAG Airflow: informes y alertas | Media | `airflow-dag-informes.md` |
+| D8A-01 | DAG Airflow: ETL Spark completo | Alta | `airflow-dag-etl.md` |
+| D8A-02 | DAG Airflow: inferencia batch ML | Alta | `airflow-dag-ml.md` |
+| D8A-03 | DAG Airflow: informes automáticos | Media | `airflow-dag-informes.md` |
 
 ### Día 9–10 · Documentación y cierre
 
