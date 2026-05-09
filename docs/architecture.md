@@ -18,7 +18,7 @@
 1. **Ingesta**: CSV clínicos/operativos e imágenes RX hacia PostgreSQL y MinIO.
 2. **Procesamiento**: jobs PySpark (validación, limpieza, agregados, features).
 3. **IA**: inferencia y registro de predicciones sobre radiografías almacenadas en MinIO.
-4. **API**: FastAPI como fachada (predicciones, pacientes, estado del pipeline, healthchecks).
+4. **API**: Flask como fachada (predicciones, pacientes, estado del pipeline, healthchecks); UI web integrada.
 5. **Dashboard**: Streamlit con métricas, matriz de confusión y alertas simuladas.
 6. **Automatización**: DAGs en **Airflow** (ingesta programada, ETL Spark, inferencia ML, informes y alertas).
 
@@ -28,7 +28,7 @@
 
 | Capa | Tecnología | Rol |
 |------|------------|-----|
-| API | **FastAPI** | REST, orquestación de servicios internos |
+| API | **Flask** | REST, UI web, orquestación de servicios internos |
 | IA | **TensorFlow** (Keras) | Clasificación triple de radiografías de tórax |
 | Big Data | **Apache Spark** (PySpark) | ETL y análisis distribuible / escalable |
 | Automatización | **Apache Airflow** | Orquestación de pipelines (DAGs, dependencias, reintentos, monitorización) |
@@ -81,7 +81,7 @@ flowchart TB
     end
 
     subgraph Servicios
-        API[FastAPI — API REST]
+        API[Flask — API REST + UI]
         ML[TensorFlow — servicio ML]
         DASH[Streamlit — Dashboard]
     end
@@ -185,7 +185,7 @@ Airflow aporta: **dependencias** entre tareas (ETL antes que ML), **reintentos**
 
 ```
 salle-hospital/
-├── api/              # FastAPI
+├── api/              # Flask (REST + UI)
 ├── dashboard/        # Streamlit
 ├── ml/               # TensorFlow (entrenamiento + inferencia)
 ├── pipeline/         # Jobs PySpark

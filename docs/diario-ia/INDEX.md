@@ -10,7 +10,9 @@
 | 2026-05-05 | 001 Informe comparativa 4 arquitecturas (Día 5) | [entradas/2026-05-05.md](entradas/2026-05-05.md#entrada-001--informe-día-5-comparativa-4-arquitecturas-y-conclusión-memoria) |
 | 2026-05-06 | 001 API Flask, pacientes y UI RX (Día 6) | [entradas/2026-05-06.md](entradas/2026-05-06.md#entrada-001--día-6-api-flask-pacientes-ui-radiografías-e-integración-ml) |
 | 2026-05-07 | 001 Dashboard Streamlit y robustez (Día 7) | [entradas/2026-05-07.md](entradas/2026-05-07.md#entrada-001--día-7-dashboard-streamlit-visualización-y-robustez) |
+| 2026-05-08 | 001 Monitorización y calidad (Día 8) | [entradas/2026-05-08.md](entradas/2026-05-08.md#entrada-001--día-8-monitorización-y-calidad-de-datos) |
+| 2026-05-09 | 001 Memoria técnica y documentación (Día 9) | [entradas/2026-05-09.md](entradas/2026-05-09.md#entrada-001--día-9-documentación-memoria-técnica-y-cierre-documental) |
 
 ---
 
-_Total entradas: 12_
+_Total entradas: 14_
