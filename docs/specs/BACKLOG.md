@@ -1,6 +1,6 @@
 # Backlog — salle-hospital
 
-Última actualización: 2026-05-08
+Última actualización: 2026-05-09
 
 Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 
@@ -50,6 +50,10 @@ Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 | D8M-02 | Validación imágenes corruptas/incompletas + auditoría BD | [monitorizacion-calidad-d8.md](monitorizacion-calidad-d8.md) | Spark + `data_quality_audit.py` |
 | D8M-03 | Alertas pipeline, inferencia y calidad | [monitorizacion-calidad-d8.md](monitorizacion-calidad-d8.md) | `db_alerts`, Airflow callback, dashboard |
 | D8M-04 | Healthchecks Docker ampliados + retry MinIO | [monitorizacion-calidad-d8.md](monitorizacion-calidad-d8.md) | minio, spark, watcher, pipeline |
+| D9-01 | README completo y enlaces documentación | [documentacion-d9.md](documentacion-d9.md) | `README.md` |
+| D9-02 | Memoria técnica | [documentacion-d9.md](documentacion-d9.md) | `docs/memoria-tecnica.md` |
+| D9-03 | Diagramas + ética (Prompt Injection ×2) | [documentacion-d9.md](documentacion-d9.md) | `diagramas.md`, `etica.md` |
+| D9-04 | Diario IA consolidado (prompts, errores) | [documentacion-d9.md](documentacion-d9.md) | `diario-ia/entradas/2026-05-09.md` |
 
 ---
 
@@ -91,14 +95,12 @@ Leyenda: `hecho` · `en curso` · `pendiente` · `bloqueado`
 | D8A-02 | DAG Airflow: inferencia batch ML | Alta | `airflow-dag-ml.md` |
 | D8A-03 | DAG Airflow: informes automáticos | Media | `airflow-dag-informes.md` |
 
-### Día 9–10 · Documentación y cierre
+### Día 10 · Cierre
 
 | ID | Tarea | Prioridad | Spec |
 |----|-------|-----------|------|
-| D9-01 | Diario IA completo (entregable) | Alta | — |
-| D9-02 | Memoria técnica | Alta | — |
-| D9-03 | Consideraciones éticas y legales | Alta | `docs/etica.md` |
-| D9-04 | Presentación 10–15 min | Alta | — |
+| D10-01 | Presentación 10–15 min | Alta | — |
+| D10-02 | Revisión final entregables y demo | Media | — |
 
 ---
 
