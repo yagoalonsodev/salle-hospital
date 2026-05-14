@@ -82,6 +82,7 @@ Objetivo: **extraer datos sensibles** o la configuración interna del asistente.
 
 ## 5. Referencias internas
 
+- [estructura-repositorio.md](estructura-repositorio.md) — organización del código  
 - [evaluacion-clinica-v1.md](ml/evaluacion-clinica-v1.md) — limitaciones del modelo  
 - [monitorizacion-calidad-d8.md](specs/monitorizacion-calidad-d8.md) — alertas y calidad  
 - [diario-ia/](diario-ia/) — desarrollo asistido y correcciones humanas  

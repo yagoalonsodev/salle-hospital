@@ -183,16 +183,8 @@ Airflow aporta: **dependencias** entre tareas (ETL antes que ML), **reintentos**
 
 ## 7. Estructura de repositorio
 
-```
-salle-hospital/
-├── api/              # Flask (REST + UI)
-├── dashboard/        # Streamlit
-├── ml/               # TensorFlow (entrenamiento + inferencia)
-├── pipeline/         # Jobs PySpark
-├── airflow/          # DAGs y configuración Airflow
-├── data/             # Datos locales de desarrollo (no versionados en bloque)
-├── docs/             # Arquitectura, especificaciones SDD
-├── infra/            # Config Spark, Airflow y utilidades
-├── docker-compose.yml
-└── README.md
-```
+El árbol completo (raíz, subcarpetas por módulo, `.gitignore`, mapa carpeta → responsabilidad) es el documento canónico:
+
+**[estructura-repositorio.md](estructura-repositorio.md)**
+
+Resumen de capas: `api/` (Flask) · `ml/` (TensorFlow) · `pipeline/jobs/` (PySpark) · `scripts/` (watcher, Airflow) · `airflow/` · `infra/` · `data/` · `docs/`.

@@ -1,5 +1,7 @@
 # Dashboard Streamlit — laSalle Health
 
+**Estructura del módulo:** [`docs/estructura-repositorio.md`](../docs/estructura-repositorio.md#dashboard--visualización-streamlit).
+
 Visualización operativa (Día 7): métricas IA, imágenes, pipeline, alertas y calidad.
 
 ## Arranque

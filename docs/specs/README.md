@@ -2,6 +2,8 @@
 
 Metodología obligatoria del encargo (`enunciado.md`): **especificar antes de codificar**.
 
+Estructura del repo (dónde va cada módulo): [`../estructura-repositorio.md`](../estructura-repositorio.md).
+
 ## Flujo
 
 1. Elegir tarea en [`BACKLOG.md`](BACKLOG.md)

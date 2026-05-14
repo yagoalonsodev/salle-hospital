@@ -10,6 +10,7 @@
 | Ítem | Ruta |
 |------|------|
 | README completo | `README.md` |
+| Estructura canónica carpetas | `docs/estructura-repositorio.md` |
 | Memoria técnica | `docs/memoria-tecnica.md` |
 | Diagramas | `docs/diagramas.md` |
 | Ética + Prompt Injection | `docs/etica.md` |

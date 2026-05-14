@@ -2,7 +2,7 @@
 
 Sistema inteligente de soporte hospitalario: pipeline Big Data, clasificación de radiografías de tórax (**Sana / Neumonía / COVID-19**), API clínica y dashboard operativo.
 
-**Documentación principal:** [Memoria técnica](docs/memoria-tecnica.md) · [Diagramas](docs/diagramas.md) · [Ética y Prompt Injection](docs/etica.md) · [Diario IA](docs/diario-ia/)
+**Documentación principal:** [Estructura del repo](docs/estructura-repositorio.md) · [Memoria técnica](docs/memoria-tecnica.md) · [Diagramas](docs/diagramas.md) · [Ética](docs/etica.md) · [Diario IA](docs/diario-ia/)
 
 ---
 
@@ -48,17 +48,24 @@ docker compose up -d --build
 
 ## Estructura del repositorio
 
+Árbol completo y convenciones: **[`docs/estructura-repositorio.md`](docs/estructura-repositorio.md)** (documento canónico).
+
 ```
-├── api/              # Flask: REST + UI (templates, static/js)
-├── ml/               # TensorFlow: entrenamiento (scripts/) + inferencia (app/)
-├── pipeline/         # Jobs PySpark (ingesta, preprocesado)
-├── dashboard/        # Streamlit
-├── airflow/dags/     # DAG salle_rx_pipeline
-├── scripts/          # Watcher, utilidades, alertas
-├── data/             # Raw / processed (bind mount)
-├── docs/             # Memoria, specs SDD, diario IA
-├── infra/            # Postgres, Spark, watcher
-└── docker-compose.yml
+practica-tocha/
+├── api/                 # Flask: REST + UI (routes → services → repositories)
+├── ml/                  # scripts/ (entrenamiento) + app/ (inferencia FastAPI)
+├── pipeline/jobs/       # PySpark: ingesta, preprocesado, db_log
+├── dashboard/app/       # Streamlit → API /api/dashboard
+├── scripts/             # Watcher, Airflow, alertas, build_clinical_data
+├── airflow/             # dags/, config/, logs/
+├── infra/               # postgres/, spark/, watcher/
+├── data/                # raw/ + processed/ (volumen Docker; ver .gitignore)
+├── docs/                # memoria, specs/, diario-ia/, ml/
+├── .cursor/skills/      # SDD, diario IA, seguridad
+├── docker-compose.yml
+├── .env.example
+├── enunciado.md
+└── AGENTS.md
 ```
 
 ---
@@ -111,6 +118,7 @@ Resultados: [`docs/ml/resultados-entrenamiento-v1.md`](docs/ml/resultados-entren
 
 | Documento | Contenido |
 |-----------|-----------|
+| [`docs/estructura-repositorio.md`](docs/estructura-repositorio.md) | Árbol de carpetas (canónico) |
 | [`docs/architecture.md`](docs/architecture.md) | Decisiones de diseño |
 | [`docs/database-architecture.md`](docs/database-architecture.md) | Esquema PostgreSQL |
 | [`docs/diagramas.md`](docs/diagramas.md) | Diagramas Mermaid |
