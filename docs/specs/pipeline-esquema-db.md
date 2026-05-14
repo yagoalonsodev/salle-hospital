@@ -40,7 +40,7 @@ Definir el modelo relacional en PostgreSQL para la aplicación hospitalaria: pac
 - [x] ENUMs, FKs e índices básicos.
 - [x] Documento de arquitectura de BD.
 - [x] Montaje en `docker-compose.yml`.
-- [ ] Job de ingesta CSV → tablas (D2-03).
+- [x] Job de ingesta CSV → tablas (D2-03) — `ingest_csv_to_postgres.py`.
 
 ## 6. Prompt base
 

@@ -1,5 +1,7 @@
 # Airflow — salle-hospital
 
+**Estructura del módulo:** [`docs/estructura-repositorio.md`](../docs/estructura-repositorio.md#airflow--orquestación) — DAG en `airflow/dags/`, scripts compartidos en `scripts/`.
+
 ## UI
 
 http://localhost:8081 — credenciales en `.env` (`AIRFLOW_ADMIN_USER`, `AIRFLOW_ADMIN_PASSWORD`; plantilla en `.env.example`).

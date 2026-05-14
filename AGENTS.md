@@ -21,11 +21,12 @@ Ruta: `.cursor/skills/`
 ## Documentación clave
 
 - Encargo: `enunciado.md`
+- **Estructura de carpetas:** `docs/estructura-repositorio.md`
 - Arquitectura: `docs/architecture.md`
 - Specs y tareas: `docs/specs/`
 - Diario IA: `docs/diario-ia/`
 
-## Estado rápido (2026-05-07)
+## Estado rápido (2026-05-09)
 
-- **Hecho:** Días 1–7 — infra, pipeline, ML, API Flask + UI, dashboard Streamlit.
-- **Siguiente:** D8 — DAGs ETL/ML batch; D9 — memoria, ética, presentación.
+- **Hecho:** Días 1–9 — infra, pipeline, ML, API Flask + UI, dashboard, monitorización, memoria y documentación.
+- **Siguiente:** D10 — demo, testing desde cero, presentación final.

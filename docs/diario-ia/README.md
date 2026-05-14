@@ -16,6 +16,8 @@ Puedes decir en cualquier momento: *«guárdalo en el diario»* o *«no guardes 
 
 ## Estructura
 
+Árbol completo del repositorio: [`../estructura-repositorio.md`](../estructura-repositorio.md).
+
 ```
 docs/diario-ia/
 ├── README.md          ← este archivo

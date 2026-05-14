@@ -1,5 +1,24 @@
 # Pipeline PySpark — salle-hospital
 
+**Estructura del módulo:** [`docs/estructura-repositorio.md`](../docs/estructura-repositorio.md#pipeline--big-data-pyspark) — jobs en `pipeline/jobs/`.
+
+## Job: ingesta CSV clínico → PostgreSQL (D2-03)
+
+Spec: [`docs/specs/pipeline-ingesta-csv.md`](../docs/specs/pipeline-ingesta-csv.md)
+
+```bash
+# Generar CSV si no existe
+python3 scripts/build_clinical_data.py
+
+docker exec salle-pipeline /opt/spark/bin/spark-submit \
+  --master spark://spark-master:7077 \
+  /opt/pipeline/jobs/ingest_csv_to_postgres.py
+```
+
+Carga `studies.csv` → tablas `patients` y `studies` (upsert idempotente).
+
+---
+
 ## Job: ingesta, validación y deduplicación de imágenes
 
 Spec: [`docs/specs/pipeline-ingesta-imagenes-calidad.md`](../docs/specs/pipeline-ingesta-imagenes-calidad.md)

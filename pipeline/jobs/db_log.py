@@ -30,16 +30,16 @@ def _safe_db(fn, *args, **kwargs) -> None:
         conn.close()
 
 
-def start_run(run_id: str, job_name: str) -> None:
+def start_run(run_id: str, job_name: str, stage: str = "ingesta_imagenes") -> None:
     def _do(conn):
         with conn.cursor() as cur:
             cur.execute(
                 """
                 INSERT INTO pipeline_runs (run_id, job_name, stage, status, started_at)
-                VALUES (%s, %s, 'ingesta_imagenes', 'running', %s)
+                VALUES (%s, %s, %s, 'running', %s)
                 ON CONFLICT (run_id) DO NOTHING
                 """,
-                (run_id, job_name, datetime.now(timezone.utc)),
+                (run_id, job_name, stage, datetime.now(timezone.utc)),
             )
 
     _safe_db(_do)

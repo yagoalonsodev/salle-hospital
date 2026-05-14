@@ -1,23 +1,26 @@
 # Datos — salle-hospital
 
-Estructura alineada con `enunciado.md` y `docs/specs/pipeline-datos-ejemplo.md`.
+**Estructura canónica:** [`docs/estructura-repositorio.md`](../docs/estructura-repositorio.md#data--datos-locales-volumen-docker) (sección `data/`).  
+Specs: [`docs/specs/pipeline-datos-ejemplo.md`](../docs/specs/pipeline-datos-ejemplo.md).
 
-## Árbol
+## Árbol `data/` (resumen)
 
 ```text
 data/
-├── raw/                              # Entrada (no versionado en bloque)
-│   ├── covid19_vs_pneumonia/         # RX: train|test / COVID19|NORMAL|PNEUMONIA
-│   │   └── manifest.csv            # Una fila por imagen + label unificada
-│   └── clinical/                     # CSV derivados del dataset RX (ingesta Spark)
-│       ├── studies.csv               # Una fila por imagen (+ patient_id opaco)
-│       └── pipeline_events.csv       # Log simulado de ingesta
-└── processed/                        # Salida ETL / preprocesado ML
-    ├── manifest/
-    └── features/
-
-ml/models/                            # SavedModel TensorFlow (no en data/)
+├── raw/
+│   ├── clinical/                     # studies.csv, pipeline_events.csv
+│   └── covid19_vs_pneumonia/
+│       ├── manifest.csv
+│       ├── incoming/                 # Bandeja watcher → DAG Airflow
+│       ├── train/{NORMAL,PNEUMONIA,COVID19}/
+│       └── test/{NORMAL,PNEUMONIA,COVID19}/
+└── processed/
+    ├── manifest/                     # validated/rejected parquet, ingest_report
+    ├── features/v1/                  # RX 224×224 por split/label (ML)
+    └── watcher/                      # pending.flag, events.jsonl
 ```
+
+Los `.jpg` masivos están en `.gitignore`; ver volúmenes en `README.md`.
 
 ## Etiquetas ML
 

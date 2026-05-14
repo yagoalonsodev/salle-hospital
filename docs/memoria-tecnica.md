@@ -14,7 +14,7 @@
 
 Se ha implementado una plataforma de **soporte hospitalario** que integra **Big Data** (Apache Spark, PostgreSQL, MinIO), **orquestación** (Apache Airflow), **Deep Learning** (TensorFlow / ResNet50 para radiografías de tórax) y **capa de aplicación** (API Flask, dashboard Streamlit). El sistema clasifica radiografías en tres clases — **sana**, **neumonía** y **COVID-19** — con precisión de test ~94 % (ResNet50 v1), expone resultados vía API y dashboard, y automatiza la ingesta de nuevas imágenes mediante watcher + DAG.
 
-El desarrollo siguió **Spec-Driven Development (SDD)** y **Vibe Coding** con Cursor; el proceso queda documentado en [`docs/diario-ia/`](diario-ia/).
+El desarrollo siguió **Spec-Driven Development (SDD)** con Cursor; el proceso queda documentado en [`docs/diario-ia/`](diario-ia/).
 
 ---
 
@@ -30,6 +30,8 @@ El hospital necesita explotar datos clínicos e imágenes RX para:
 **Alcance MVP cumplido:** ingesta masiva y por watcher, preprocesado, entrenamiento e inferencia, API con UI web, dashboard analítico, monitorización (Día 8) y documentación (Día 9).
 
 Detalle del encargo: [`enunciado.md`](../enunciado.md) (local).
+
+Organización del código: [`estructura-repositorio.md`](estructura-repositorio.md) (árbol canónico de carpetas).
 
 ---
 
@@ -224,12 +226,42 @@ Volúmenes persistentes: `postgres_data`, `minio_data`, `airflow_metadata`, bind
 
 | Documento | Contenido |
 |-----------|-----------|
+| [estructura-repositorio.md](estructura-repositorio.md) | Árbol de carpetas |
 | [architecture.md](architecture.md) | Decisiones de stack |
 | [database-architecture.md](database-architecture.md) | Esquema ER |
 | [diagramas.md](diagramas.md) | Mermaid exportables |
 | [etica.md](etica.md) | Ética + prompt injection |
 | [specs/BACKLOG.md](specs/BACKLOG.md) | Estado de tareas |
 | [ml/resultados-entrenamiento-v1.md](ml/resultados-entrenamiento-v1.md) | Métricas ML |
+
+---
+
+## 13. Cumplimiento del encargo (`enunciado.md`)
+
+| Requisito del enunciado | Estado | Evidencia en el repo |
+|-------------------------|--------|----------------------|
+| Modelo IA justificado (clasificación RX 3 clases) | **Cumple** | `docs/ml/arquitectura-rx.md`, ResNet50, comparativa Día 5 |
+| Big Data: volumen + no estructurado + multi-fuente | **Cumple** | ~6.4k JPG, CSV clínico, MinIO + Postgres |
+| Pipeline: ingesta → limpieza → transformación → análisis | **Cumple** | `pipeline/jobs/`, specs en `docs/specs/` |
+| Automatización (informes, alertas, ficheros, ingesta) | **Cumple** | Watcher, Airflow DAG, tabla `alerts`, dashboard |
+| Visualización (gráficos, dashboard) | **Cumple** | Streamlit `:8501`, UI Flask |
+| Docker Compose, un comando | **Cumple** | `docker compose up -d --build`, `README.md` |
+| Postgres + almacén no estructurado (MinIO) | **Cumple** | `docker-compose.yml`, `docs/database-architecture.md` |
+| Framework escalable (PySpark) + justificación | **Cumple** | `docs/preprocess-distributed-justification.md` |
+| Logging, calidad, alertas | **Cumple** | Día 8, `docs/specs/monitorizacion-calidad-d8.md` |
+| SDD + specs antes de código | **Cumple** | `docs/specs/`, `.cursor/skills/salle-sdd/` |
+| Diario IA (prompts, iteraciones, reflexión) | **Cumple** | `docs/diario-ia/` |
+| Matriz confusión + reflexión clínica FP/FN | **Cumple** | `docs/ml/evaluacion-clinica-v1.md`, informes |
+| Ética y legal (sesgos, privacidad, riesgos) | **Cumple** | `docs/etica.md` (+ prompt injection) |
+| Memoria técnica (apartados del enunciado) | **Cumple** | Este documento |
+| Código organizado | **Cumple** | `docs/estructura-repositorio.md` |
+| Presentación 10–15 min | **Pendiente** | Día 10 (guion en conversación / por entregar) |
+| Ingesta CSV clínico → Postgres (Spark batch) | **Sí** | `ingest_csv_to_postgres.py` (D2-03) |
+| Informes PDF automáticos | **Parcial** | Métricas en dashboard; sin generador PDF |
+| Email simulado en alertas | **Parcial** | Alertas en BD + dashboard (no SMTP) |
+| SavedModel en contenedor ML | **Parcial** | `.h5` operativo; export SavedModel documentado como pendiente |
+
+**Conclusión:** el MVP del encargo está **sustancialmente cubierto** para entrega y demo. Los ítems *parcial* son mejoras explícitas en BACKLOG o documentación, no bloquean la defensa del proyecto si se mencionan como limitaciones.
 
 ---
 

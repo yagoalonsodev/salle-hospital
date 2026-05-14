@@ -2,6 +2,8 @@
 
 PostgreSQL 16 aloja los datos **estructurados** de la aplicación. Las radiografías (no estructuradas) viven en **MinIO**; PostgreSQL guarda metadatos, predicciones, trazas del pipeline y alertas.
 
+DDL y migraciones: [`estructura-repositorio.md`](estructura-repositorio.md#infra--infraestructura) → `infra/postgres/`.
+
 ## Instancias lógicas
 
 | Base de datos | Uso | Creación |

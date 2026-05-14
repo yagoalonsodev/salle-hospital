@@ -1,5 +1,7 @@
 # API Flask — laSalle Health Center
 
+**Estructura del módulo:** [`docs/estructura-repositorio.md`](../docs/estructura-repositorio.md#api--capa-hospitalaria-flask) (`routes/` → `services/` → `repositories/`).
+
 ## Arranque (Docker)
 
 ```bash

@@ -2,6 +2,8 @@
 
 Diagramas en Mermaid para memoria y presentación. Renderizan en GitHub, VS Code y muchas herramientas de exportación a PDF.
 
+**Estructura de carpetas del código:** [`estructura-repositorio.md`](estructura-repositorio.md) (no confundir con estos diagramas lógicos/de despliegue).
+
 ---
 
 ## 1. Arquitectura lógica
