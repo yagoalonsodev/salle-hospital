@@ -1,6 +1,6 @@
-# salle-hospital — laSalle Health Center
+# Sistema Inteligente de Soporte Hospitalario — TFM Máster IA & Big Data
 
-Sistema inteligente de soporte hospitalario: pipeline Big Data, clasificación de radiografías de tórax (**Sana / Neumonía / COVID-19**), API clínica y dashboard operativo.
+Plataforma integral para un hospital ficticio (**laSalle Health Center**) que combina ingeniería de datos, machine learning y APIs clínicas. Incluye ingesta y procesamiento de datos con Apache Spark, orquestación con Airflow, almacenamiento en MinIO (S3), bases documentales y relacionales, inferencia de modelos de clasificación de radiografías de tórax (**Sana / Neumonía / COVID-19**) y un dashboard operativo en Streamlit. Desarrollado como proyecto final del **Máster en Inteligencia Artificial y Big Data** (La Salle Gràcia).
 
 **Documentación principal:** [Estructura del repo](docs/estructura-repositorio.md) · [Memoria técnica](docs/memoria-tecnica.md) · [Diagramas](docs/diagramas.md) · [Ética](docs/etica.md) · [Diario IA](docs/diario-ia/)
 
@@ -75,7 +75,7 @@ Colecciones: `application_logs` (API, ML, watcher, pipeline), `airflow_logs`, `f
 Árbol completo y convenciones: **[`docs/estructura-repositorio.md`](docs/estructura-repositorio.md)** (documento canónico).
 
 ```
-practica-tocha/
+salle-hospital/
 ├── api/                 # Flask: REST + UI (routes → services → repositories)
 ├── ml/                  # scripts/ (entrenamiento) + app/ (inferencia FastAPI)
 ├── pipeline/jobs/       # PySpark: ingesta, preprocesado, db_log
@@ -160,9 +160,16 @@ Resultados: [`docs/ml/resultados-entrenamiento-v1.md`](docs/ml/resultados-entren
 
 ---
 
+## Equipo
+
+- **Yago Alonso**
+- **Alejandro Marinas**
+
+---
+
 ## Desarrollo con IA
 
-Proyecto desarrollado con **Cursor** (Vibe Coding). Prompts, errores y correcciones: [`docs/diario-ia/`](docs/diario-ia/).
+Proyecto desarrollado con asistencia de IA en el flujo de desarrollo. Prompts, errores y correcciones: [`docs/diario-ia/`](docs/diario-ia/).
 
 Skills del repo: `@salle-sdd`, `@diario-ia`, `@salle-seguridad` (`.cursor/skills/`).
 
@@ -200,4 +207,4 @@ Skills del repo: `@salle-sdd`, `@diario-ia`, `@salle-seguridad` (`.cursor/skills
 
 ## Licencia
 
-Proyecto académico — Máster / práctica integrada.
+Proyecto académico — Máster en Inteligencia Artificial y Big Data, La Salle Gràcia.
