@@ -182,7 +182,7 @@ def main() -> None:
         "seed": SEED,
         "diagnoses": list(DIAGNOSES),
         "distribution": by_diag,
-        "generated_at": datetime.utcnow().isoformat() + "Z",
+        "generated_at": datetime.now().astimezone().isoformat(),
         "path": str(RECORDS_PATH.relative_to(ROOT)),
         "note": "Dataset textual separado de radiografías (covid19_vs_pneumonia).",
     }

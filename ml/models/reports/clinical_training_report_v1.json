@@ -1,0 +1,86 @@
+{
+  "model_name": "clinical_symptoms_logreg",
+  "model_version": "clinical_symptoms_v1",
+  "model_path": "ml/models/clinical_symptoms_v1.joblib",
+  "dataset": "data/raw/clinical_records/records.csv",
+  "train_rows": 80000,
+  "val_rows": 10000,
+  "test_rows": 10000,
+  "labels": [
+    "asma",
+    "bronquitis",
+    "covid",
+    "epoc",
+    "gripe",
+    "neumonia",
+    "rinitis_alergica",
+    "sana"
+  ],
+  "f1_macro_val": 1.0,
+  "f1_macro_test": 1.0,
+  "accuracy_test": 1.0,
+  "classification_report_test": {
+    "asma": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 1250.0
+    },
+    "bronquitis": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 1250.0
+    },
+    "covid": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 1250.0
+    },
+    "epoc": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 1250.0
+    },
+    "gripe": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 1250.0
+    },
+    "neumonia": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 1250.0
+    },
+    "rinitis_alergica": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 1250.0
+    },
+    "sana": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 1250.0
+    },
+    "accuracy": 1.0,
+    "macro avg": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 10000.0
+    },
+    "weighted avg": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 10000.0
+    }
+  },
+  "trained_at": "2026-05-18T14:11:40.113978+00:00"
+}
