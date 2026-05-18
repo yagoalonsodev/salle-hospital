@@ -47,7 +47,13 @@ x-airflow-common: &airflow-common
     AIRFLOW_SCRIPTS_DIR: /opt/scripts
     DATA_ROOT: /opt/data
     PIPELINE_CONTAINER: salle-pipeline
+    ML_CONTAINER: salle-ml
     MAX_UPLOAD: "0"
+    NIGHTLY_RETRAIN_ENABLED: ${NIGHTLY_RETRAIN_ENABLED:-true}
+    NIGHTLY_HEAD_EPOCHS: ${NIGHTLY_HEAD_EPOCHS:-5}
+    NIGHTLY_FINETUNE_EPOCHS: ${NIGHTLY_FINETUNE_EPOCHS:-3}
+    FEATURES_ROOT: /opt/data/processed/features
+    FEATURES_VERSION: v1
     SERVICE_NAME: airflow
     <<: *log-env
   volumes:
@@ -80,6 +86,7 @@ services:
       - ./infra/postgres/03-patients-display-name.sql:/docker-entrypoint-initdb.d/03-patients-display-name.sql:ro
       - ./infra/postgres/04-sites-clinical-studies.sql:/docker-entrypoint-initdb.d/04-sites-clinical-studies.sql:ro
       - ./infra/postgres/05-remove-demo-rows.sql:/docker-entrypoint-initdb.d/05-remove-demo-rows.sql:ro
+      - ./infra/postgres/06-clinical-records.sql:/docker-entrypoint-initdb.d/06-clinical-records.sql:ro
     healthcheck:
       test:
         [
@@ -295,6 +302,8 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER:-salle}:${POSTGRES_PASSWORD:-salle_secret}@postgres:5432/${POSTGRES_DB:-salle_hospital}
       MODEL_VERSION: rx_resnet50_v1
       MODEL_PATH: models/rx_resnet50_v1.h5
+      CLINICAL_MODEL_PATH: models/clinical_symptoms_v1.joblib
+      CLINICAL_MODEL_VERSION: clinical_symptoms_v1
       LOG_LEVEL: INFO
       SERVICE_NAME: ml
       <<: *log-env
@@ -307,6 +316,7 @@ services:
         condition: service_healthy
     volumes:
       - ./ml/models:/app/models
+      - ./data:/opt/data
       - ./scripts:/opt/scripts:ro
     healthcheck:
       test:

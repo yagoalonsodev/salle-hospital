@@ -13,7 +13,7 @@
         <span class="brand-mark" aria-hidden="true"></span>
         <div>
           <h1>laSalle Health</h1>
-          <p class="brand-sub">Centro de clasificación de radiografías</p>
+          <p class="brand-sub">Radiografías e historial clínico con IA</p>
         </div>
       </div>
       <span id="health-badge" class="status-pill">Comprobando…</span>
@@ -23,6 +23,7 @@
   <div class="shell">
     <nav class="segmented" role="tablist" aria-label="Secciones">
       <button type="button" class="segment active" data-panel="patients">Pacientes</button>
+      <button type="button" class="segment" data-panel="clinical">Diagnóstico</button>
       <button type="button" class="segment" data-panel="upload">Radiografías</button>
       <button type="button" class="segment" data-panel="metrics">Resumen</button>
     </nav>
@@ -84,14 +85,75 @@
         <div class="panel-header">
           <h3 id="detail-title">Detalle</h3>
           <div class="btn-row">
+            <button type="button" id="btn-clinical" class="btn btn-secondary">Diagnóstico síntomas</button>
             <button type="button" id="btn-upload-rx" class="btn btn-primary">Subir radiografía</button>
-            <button type="button" id="btn-edit-patient" class="btn btn-secondary">Editar</button>
+            <button type="button" id="btn-edit-patient" class="btn btn-ghost">Editar</button>
             <button type="button" id="btn-delete-patient" class="btn btn-danger">Eliminar</button>
           </div>
         </div>
         <dl id="detail-meta" class="meta-grid"></dl>
-        <h4>Radiografías <span id="detail-study-count" class="chip">0</span></h4>
-        <ul id="detail-studies" class="study-list"></ul>
+
+        <div class="history-section">
+          <div class="history-section-header">
+            <h4>Radiografías <span id="detail-study-count" class="chip chip-rx">0</span></h4>
+            <p class="history-hint">Estudios de imagen e inferencia ResNet50</p>
+          </div>
+          <ul id="detail-studies" class="study-list report-list"></ul>
+        </div>
+
+        <div class="history-section">
+          <div class="history-section-header">
+            <h4>Informes clínicos <span id="detail-clinical-count" class="chip chip-clinical">0</span></h4>
+            <p class="history-hint">Consultas por síntomas y predicción textual</p>
+          </div>
+          <ul id="detail-clinical" class="clinical-report-list report-list"></ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Diagnóstico por síntomas -->
+    <section id="panel-clinical" class="panel">
+      <div class="panel-header">
+        <div>
+          <h2>Diagnóstico por síntomas</h2>
+          <p class="lede">Modelo entrenado con 100k registros clínicos simulados (independiente de las RX).</p>
+        </div>
+      </div>
+
+      <div class="card card-accent">
+        <form id="clinical-form" class="form-grid">
+          <label class="field field-wide">
+            <span>Paciente</span>
+            <select id="clinical-patient-id" required>
+              <option value="">— Selecciona un paciente —</option>
+            </select>
+          </label>
+          <label class="field field-wide">
+            <span>Síntomas</span>
+            <textarea id="clinical-symptoms" rows="4" maxlength="4000" required
+              placeholder="Ej.: fiebre, tos seca, fatiga, pérdida de olfato…"></textarea>
+          </label>
+          <label class="field">
+            <span>Edad (opcional)</span>
+            <input type="number" id="clinical-age" min="0" max="120" placeholder="Auto desde paciente" />
+          </label>
+          <label class="field">
+            <span>Sexo (opcional)</span>
+            <select id="clinical-sex">
+              <option value="">Del paciente</option>
+              <option value="M">Masculino</option>
+              <option value="F">Femenino</option>
+              <option value="X">No especificado</option>
+            </select>
+          </label>
+          <div class="form-actions field-wide">
+            <button type="submit" id="clinical-submit" class="btn btn-primary">Analizar síntomas</button>
+          </div>
+        </form>
+        <p id="clinical-error" class="banner banner-error hidden"></p>
+        <div id="clinical-result" class="result-card clinical-result hidden"></div>
+        <p class="disclaimer">Soporte a la decisión clínica. Dataset textual separado de radiografías.</p>
       </div>
     </section>
 
@@ -158,6 +220,7 @@
   </div>
 
   <script src="{{ url_for('static', filename='js/patients.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/clinical.js') }}"></script>
   <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>

@@ -27,6 +27,30 @@ docker exec salle-airflow airflow dags unpause salle_rx_pipeline
 
 Programación: cada **15 minutos** (ajustable en el DAG).
 
+## DAG `salle_nightly_retrain` (reentrenamiento 01:00)
+
+Reentrena **ResNet50** con todas las imágenes en `data/raw/` (dataset original + nuevas del watcher):
+
+1. `spark_preprocess_features` — PySpark `preprocess_images.py` → `data/processed/features/v1/`
+2. `train_resnet50` — `train_resnet50.py` en `salle-ml` (épocas reducidas vía `.env`)
+3. `reload_ml_service` — reinicia `salle-ml` para cargar el nuevo `.h5`
+
+**No entrena en cada imagen nueva**; eso lo hace el watcher + `salle_rx_pipeline` (ingesta). Este DAG es un **batch diario** opcional.
+
+```bash
+docker exec salle-airflow airflow dags unpause salle_nightly_retrain
+# Prueba manual (tarda mucho):
+docker exec salle-airflow airflow dags trigger salle_nightly_retrain
+```
+
+| Variable | Default | Descripción |
+|----------|---------|-------------|
+| `NIGHTLY_RETRAIN_ENABLED` | `true` | `false` omite el DAG (ShortCircuit) |
+| `NIGHTLY_HEAD_EPOCHS` | `5` | Épocas cabeza (menor que entrenamiento manual) |
+| `NIGHTLY_FINETUNE_EPOCHS` | `3` | Fine-tuning |
+
+Hora **01:00** = reloj del scheduler Airflow (por defecto **UTC**). Ajusta `AIRFLOW__CORE__DEFAULT_TIMEZONE` si necesitas hora local.
+
 ## Logging
 
 - Nivel **INFO** en consola y ficheros bajo `airflow/logs/`.

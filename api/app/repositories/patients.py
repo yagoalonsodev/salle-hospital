@@ -87,6 +87,27 @@ def get_patient(patient_id: str) -> dict[str, Any] | None:
             )
             patient["studies"] = [_row_to_dict(s) for s in cur.fetchall()]
             patient["study_count"] = len(patient["studies"])
+
+            cur.execute(
+                """
+                SELECT prediction_id, symptoms, age, sex,
+                       predicted_diagnosis::text AS predicted_diagnosis,
+                       prob_json, model_name, model_version, inferred_at
+                FROM clinical_predictions
+                WHERE patient_id = %s
+                ORDER BY inferred_at DESC
+                LIMIT 50
+                """,
+                (patient_id,),
+            )
+            reports = []
+            for r in cur.fetchall():
+                rep = _row_to_dict(r)
+                if isinstance(rep.get("prob_json"), dict):
+                    rep["probabilities"] = rep["prob_json"]
+                reports.append(rep)
+            patient["clinical_reports"] = reports
+            patient["clinical_report_count"] = len(reports)
             return patient
 
 

@@ -66,11 +66,17 @@ Cada capa tiene **una responsabilidad**. Las reglas de negocio viven en **servic
 
 ### Otras piezas del monorepo
 
+Árbol canónico: **`docs/estructura-repositorio.md`** (actualizar si cambias carpetas).
+
 | Módulo | Vista | Back / negocio |
 |--------|-------|----------------|
-| `dashboard/` | Streamlit (UI) | Solo consume `API_URL`; sin duplicar reglas de `api/` |
-| `ml/` | — | Inferencia en `inference.py`; sin HTML |
-| `pipeline/` | — | Jobs Spark; sin UI embebida |
+| `api/` | Flask + Jinja/JS | `routes/` → `services/` → `repositories/` |
+| `dashboard/` | Streamlit | Solo consume `API_URL` |
+| `ml/app/` | — | Inferencia FastAPI; entrenamiento en `ml/scripts/` |
+| `pipeline/jobs/` | — | PySpark; sin UI |
+| `scripts/` | — | Watcher, Airflow, alertas, `build_clinical_data.py` |
+| `airflow/dags/` | UI Airflow | Orquesta pipeline + auditoría |
+| `infra/postgres/` | — | DDL y migraciones SQL |
 
 ### Reglas de negocio — dónde van
 
