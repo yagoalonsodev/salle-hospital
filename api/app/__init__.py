@@ -6,6 +6,7 @@ from app.logging_config import setup_logging
 from app.routes import (
     dashboard,
     health,
+    logs,
     metrics,
     patients,
     predict,
@@ -35,6 +36,7 @@ def create_app() -> Flask:
     app.register_blueprint(sites.bp)
     app.register_blueprint(studies.bp)
     app.register_blueprint(dashboard.bp)
+    app.register_blueprint(logs.bp)
 
     @app.errorhandler(413)
     def too_large(_e):
