@@ -79,6 +79,7 @@ Documento obligatorio del encargo (`enunciado.md`). Cada día con desarrollo tie
 | 2026-05-09 | `d3f066a` | docs Día 9 |
 | 2026-05-14 | `0d38942` | feat(pipeline) D2-03 CSV |
 | 2026-05-18 | `9ffe6cc` | chore(ops) verify_stack |
+| 2026-05-18 | `f16089f` | feat(ops) MongoDB logs + log-sync |
 
 ---
 
