@@ -12,7 +12,8 @@
 | 2026-05-07 | 001 Dashboard Streamlit y robustez (Día 7) | [entradas/2026-05-07.md](entradas/2026-05-07.md#entrada-001--día-7-dashboard-streamlit-visualización-y-robustez) |
 | 2026-05-08 | 001 Monitorización y calidad (Día 8) | [entradas/2026-05-08.md](entradas/2026-05-08.md#entrada-001--día-8-monitorización-y-calidad-de-datos) |
 | 2026-05-09 | 001 Memoria técnica y documentación (Día 9) | [entradas/2026-05-09.md](entradas/2026-05-09.md#entrada-001--día-9-documentación-memoria-técnica-y-cierre-documental) |
+| 2026-05-14 | 001 D2-03 CSV→Postgres y verificación stack | [entradas/2026-05-14.md](entradas/2026-05-14.md#entrada-001--cierre-d2-03-backlog-y-verificación-del-stack) |
 
 ---
 
-_Total entradas: 14_
+_Total entradas: 15_

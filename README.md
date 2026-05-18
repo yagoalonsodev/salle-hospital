@@ -31,6 +31,18 @@ docker compose up -d --build
 > Si PostgreSQL ya existía sin la BD `airflow`:  
 > `docker compose down -v && docker compose up -d --build`
 
+### Verificación integral (sin entrenar modelos)
+
+```bash
+./scripts/verify_stack.sh
+# Solo comprobar con stack ya levantado:
+SKIP_COMPOSE_UP=1 ./scripts/verify_stack.sh
+# Guardar log en archivo:
+VERIFY_LOG=logs/verify_stack.log ./scripts/verify_stack.sh
+```
+
+Al final imprime una **tabla resumen** (OK / WARN / FAIL). Si la UI de Airflow no responde en `:8081` pero el scheduler está bien, verás **WARN** y el script puede seguir en verde; prueba `docker compose restart airflow`.
+
 ### URLs y credenciales
 
 | Servicio | URL | Acceso |
