@@ -1,6 +1,6 @@
 # Backlog — salle-hospital
 
-Última actualización: 2026-05-14
+Última actualización: 2026-05-18
 
 Leyenda: `hecho` · `pendiente` · `bloqueado`
 
@@ -100,6 +100,14 @@ Estructura del repo: [`estructura-repositorio.md`](../estructura-repositorio.md)
 | ID | Tarea | Spec / notas |
 |----|-------|----------------|
 | D8-01 | DAG `salle_rx_pipeline` | watcher → Spark → auditoría |
+
+### Dataset clínico + ML síntomas (D10)
+
+| ID | Tarea | Spec / notas |
+|----|-------|----------------|
+| D10-CL-01 | Dataset 100k registros clínicos (texto) | `pipeline-dataset-clinical-records.md`, `build_clinical_records_dataset.py` |
+| D10-CL-02 | Modelo predicción por síntomas | `ml-prediccion-clinica-sintomas.md`, `clinical_symptoms_v1.joblib` |
+| D10-CL-03 | API + UI historial (RX + informes) | `api-historial-clinico.md`, pestaña Diagnóstico |
 
 ---
 

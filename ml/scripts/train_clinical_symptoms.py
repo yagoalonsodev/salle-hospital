@@ -36,6 +36,13 @@ REPORT_PATH = MODEL_DIR / "reports" / "clinical_training_report_v1.json"
 VERSION = os.environ.get("CLINICAL_MODEL_VERSION", "clinical_symptoms_v1")
 
 
+def _one_hot_encoder() -> OneHotEncoder:
+    try:
+        return OneHotEncoder(handle_unknown="ignore", sparse_output=False)
+    except TypeError:
+        return OneHotEncoder(handle_unknown="ignore", sparse=False)
+
+
 def build_pipeline() -> Pipeline:
     text_features = "symptoms"
     numeric_features = ["age"]
@@ -56,7 +63,7 @@ def build_pipeline() -> Pipeline:
             ("age_scaled", StandardScaler(), numeric_features),
             (
                 "sex_ohe",
-                OneHotEncoder(handle_unknown="ignore", sparse_output=False),
+                _one_hot_encoder(),
                 categorical_features,
             ),
         ]
