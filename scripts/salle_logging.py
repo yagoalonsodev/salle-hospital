@@ -22,4 +22,10 @@ def setup_logging(name: str | None = None) -> logging.Logger:
         root.addHandler(handler)
         root.setLevel(level)
     logger = logging.getLogger(name or "salle")
+    try:
+        from mongo_log_store import attach_mongo_handler
+
+        attach_mongo_handler(logger)
+    except ImportError:
+        pass
     return logger

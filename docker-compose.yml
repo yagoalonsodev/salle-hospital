@@ -7,6 +7,13 @@
 #   docker compose start
 #   docker compose up -d dashboard
 # El dashboard espera a que la API esté healthy para reducir creaciones en paralelo.
+#
+# MongoDB (logs): credenciales en .env → MONGO_* (mismas que POSTGRES_* en desarrollo)
+
+x-log-env: &log-env
+  MONGO_LOG_ENABLED: ${MONGO_LOG_ENABLED:-true}
+  MONGO_DB: ${MONGO_DB:-salle_logs}
+  MONGODB_URI: mongodb://${MONGO_USER:-${POSTGRES_USER:-salle}}:${MONGO_PASSWORD:-${POSTGRES_PASSWORD:-salle_secret}}@mongodb:27017/${MONGO_DB:-salle_logs}?authSource=admin
 
 x-airflow-common: &airflow-common
   image: apache/airflow:2.10.4-python3.11
@@ -16,6 +23,9 @@ x-airflow-common: &airflow-common
     AIRFLOW__CORE__LOAD_EXAMPLES: "false"
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
     AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "false"
+    # Menos workers + más timeout: evita "No response from gunicorn master" en Docker Desktop (RAM limitada)
+    AIRFLOW__WEBSERVER__WORKERS: "1"
+    AIRFLOW__WEBSERVER__WEB_SERVER_MASTER_TIMEOUT: "300"
     _AIRFLOW_WWW_USER_USERNAME: ${AIRFLOW_ADMIN_USER:-admin}
     _AIRFLOW_WWW_USER_PASSWORD: ${AIRFLOW_ADMIN_PASSWORD:-Admin123.}
     _AIRFLOW_WWW_USER_FIRSTNAME: Admin
@@ -38,6 +48,8 @@ x-airflow-common: &airflow-common
     DATA_ROOT: /opt/data
     PIPELINE_CONTAINER: salle-pipeline
     MAX_UPLOAD: "0"
+    SERVICE_NAME: airflow
+    <<: *log-env
   volumes:
     - ./airflow/dags:/opt/airflow/dags
     - ./airflow/logs:/opt/airflow/logs
@@ -77,6 +89,30 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - salle-net
+
+  mongodb:
+    image: mongo:7.0
+    container_name: salle-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-${POSTGRES_USER:-salle}}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-${POSTGRES_PASSWORD:-salle_secret}}
+    volumes:
+      - mongo_data:/data/db
+      - ./infra/mongodb/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'mongosh -u "$$MONGO_INITDB_ROOT_USERNAME" -p "$$MONGO_INITDB_ROOT_PASSWORD" --authenticationDatabase admin --quiet --eval "db.adminCommand(''ping'')" || exit 1',
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
     networks:
       - salle-net
 
@@ -178,7 +214,13 @@ services:
   airflow:
     <<: *airflow-common
     container_name: salle-airflow
-    command: standalone
+    # Borra PID obsoleto en el volumen (tras stop/restart); si no, Gunicorn falla y Safari ve "conexión perdida"
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - |
+        set -euo pipefail
+        rm -f /opt/airflow/airflow-webserver.pid /opt/airflow/airflow-scheduler.pid 2>/dev/null || true
+        exec /usr/bin/dumb-init -- /entrypoint standalone
     ports:
       - "8081:8080"
     depends_on:
@@ -192,8 +234,8 @@ services:
       test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
       interval: 30s
       timeout: 10s
-      retries: 5
-      start_period: 90s
+      retries: 8
+      start_period: 180s
 
   api:
     build:
@@ -213,10 +255,15 @@ services:
       MODEL_VERSION: rx_resnet50_v1
       ML_REPORT_PATH: /app/ml_reports/training_report_v1.json
       LOG_LEVEL: INFO
+      SERVICE_NAME: api
+      <<: *log-env
     volumes:
       - ./ml/models/reports:/app/ml_reports:ro
+      - ./scripts:/opt/scripts:ro
     depends_on:
       postgres:
+        condition: service_healthy
+      mongodb:
         condition: service_healthy
       minio:
         condition: service_started
@@ -248,13 +295,19 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER:-salle}:${POSTGRES_PASSWORD:-salle_secret}@postgres:5432/${POSTGRES_DB:-salle_hospital}
       MODEL_VERSION: rx_resnet50_v1
       MODEL_PATH: models/rx_resnet50_v1.h5
+      LOG_LEVEL: INFO
+      SERVICE_NAME: ml
+      <<: *log-env
     depends_on:
       minio:
         condition: service_started
       postgres:
         condition: service_healthy
+      mongodb:
+        condition: service_healthy
     volumes:
       - ./ml/models:/app/models
+      - ./scripts:/opt/scripts:ro
     healthcheck:
       test:
         [
@@ -307,11 +360,15 @@ services:
       WATCHER_DEBOUNCE_SEC: ${WATCHER_DEBOUNCE_SEC:-2.0}
       DATABASE_URL: postgresql://${POSTGRES_USER:-salle}:${POSTGRES_PASSWORD:-salle_secret}@postgres:5432/${POSTGRES_DB:-salle_hospital}
       LOG_LEVEL: INFO
+      SERVICE_NAME: watcher
+      <<: *log-env
     volumes:
       - ./data:/opt/data
       - ./scripts:/opt/scripts:ro
     depends_on:
       postgres:
+        condition: service_healthy
+      mongodb:
         condition: service_healthy
       spark-master:
         condition: service_started
@@ -343,10 +400,14 @@ services:
       DATA_ROOT: /opt/data
       MAX_UPLOAD: "0"
       LOG_LEVEL: INFO
+      SERVICE_NAME: pipeline
+      <<: *log-env
     depends_on:
       spark-master:
         condition: service_started
       postgres:
+        condition: service_healthy
+      mongodb:
         condition: service_healthy
     volumes:
       - ./data:/opt/data
@@ -364,9 +425,32 @@ services:
     networks:
       - salle-net
 
+  log-sync:
+    build:
+      context: .
+      dockerfile: infra/log-sync/Dockerfile
+    container_name: salle-log-sync
+    restart: unless-stopped
+    environment:
+      SERVICE_NAME: log-sync
+      AIRFLOW_LOG_DIR: /opt/airflow/logs
+      EXTRA_LOG_DIRS: /opt/logs
+      LOG_SYNC_INTERVAL_SEC: ${LOG_SYNC_INTERVAL_SEC:-60}
+      <<: *log-env
+    volumes:
+      - ./airflow/logs:/opt/airflow/logs:ro
+      - ./logs:/opt/logs:ro
+      - ./scripts:/opt/scripts:ro
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - salle-net
+
 volumes:
   postgres_data:
   minio_data:
+  mongo_data:
   airflow_metadata:
 
 networks:

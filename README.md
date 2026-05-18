@@ -17,6 +17,7 @@ Sistema inteligente de soporte hospitalario: pipeline Big Data, clasificación d
 | Base de datos | PostgreSQL 16 | 5432 |
 | Objetos (RX) | MinIO (S3) | 9000 / consola 9001 |
 | Dashboard | Streamlit | 8501 |
+| Logs (centralizado) | MongoDB 7 | 27017 |
 | Infra | Docker Compose | — |
 
 ---
@@ -55,6 +56,17 @@ Al final imprime una **tabla resumen** (OK / WARN / FAIL). Si la UI de Airflow n
 | **MinIO consola** | http://localhost:9001 | `.env` → `MINIO_ROOT_*` |
 | **Spark Master UI** | http://localhost:8080 | — |
 | **PostgreSQL** | `localhost:5432` | `.env` → `POSTGRES_*` |
+| **MongoDB (logs)** | `localhost:27017` | `.env` → `MONGO_*` (mismas credenciales que Postgres en dev) |
+
+### Consultar logs en MongoDB
+
+```bash
+docker compose up -d mongodb log-sync
+docker exec salle-log-sync python3 /opt/scripts/query_logs.py --limit 20
+docker exec salle-mongodb mongosh -u "$MONGO_USER" -p "$MONGO_PASSWORD" --authenticationDatabase admin salle_logs
+```
+
+Colecciones: `application_logs` (API, ML, watcher, pipeline), `airflow_logs`, `file_logs` (p. ej. `verify_stack.log`). El daemon `salle-log-sync` vuelca ficheros de `airflow/logs/` y `logs/` cada 60 s.
 
 ---
 

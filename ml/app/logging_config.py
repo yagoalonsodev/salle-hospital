@@ -21,3 +21,14 @@ def setup_logging() -> None:
     )
     root.addHandler(h)
     root.setLevel(level)
+    try:
+        from pathlib import Path
+
+        scripts = Path("/opt/scripts")
+        if scripts.is_dir() and str(scripts) not in sys.path:
+            sys.path.insert(0, str(scripts))
+        from mongo_log_store import attach_mongo_handler
+
+        attach_mongo_handler(root)
+    except ImportError:
+        pass
