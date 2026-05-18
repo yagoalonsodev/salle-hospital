@@ -80,7 +80,7 @@ Estructura del repo: [`estructura-repositorio.md`](../estructura-repositorio.md)
 
 | ID | Tarea | Spec / notas |
 |----|-------|----------------|
-| D8M-01 | Logging centralizado | `salle_logging.py` |
+| D8M-01 | Logging centralizado (+ MongoDB) | `salle_logging.py`, `mongo_log_store.py`, `log-sync` |
 | D8M-02 | Calidad imágenes + auditoría BD | `data_quality_audit.py` |
 | D8M-03 | Alertas pipeline / inferencia | `db_alerts.py`, Airflow callback |
 | D8M-04 | Healthchecks Docker ampliados | compose |
