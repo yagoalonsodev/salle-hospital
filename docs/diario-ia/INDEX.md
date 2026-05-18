@@ -23,7 +23,7 @@ Documento obligatorio del encargo (`enunciado.md`). Cada día con desarrollo tie
 | 2026-05-11 – 13 | — | Sin commits en repo | — |
 | 2026-05-14 | Cierre D2-03 | 001 CSV → Postgres | [2026-05-14.md](entradas/2026-05-14.md) |
 | 2026-05-15 – 17 | — | Sin commits en repo | — |
-| 2026-05-18 | Verificación + Airflow + logs | 001 verify_stack · 002 UI Airflow · 003 Índice · 004 MongoDB logs | [2026-05-18.md](entradas/2026-05-18.md) |
+| 2026-05-18 | Verificación + Airflow + logs | 001–005 verify_stack, Airflow, índice, MongoDB, dashboard logs | [2026-05-18.md](entradas/2026-05-18.md) |
 
 ---
 
@@ -47,6 +47,8 @@ Documento obligatorio del encargo (`enunciado.md`). Cada día con desarrollo tie
 | 2026-05-18 | verify_stack.sh | [entrada 001](entradas/2026-05-18.md#entrada-001--script-verify_stacksh-un-comando-levanta-y-prueba-todo) |
 | 2026-05-18 | Airflow UI :8081 | [entrada 002](entradas/2026-05-18.md#entrada-002--airflow-ui-en-8081-webserver-login-short-circuit-dag) |
 | 2026-05-18 | MongoDB logs centralizados | [entrada 004](entradas/2026-05-18.md#entrada-004--mongodb-centralizada-para-todos-los-logs) |
+| 2026-05-18 | Dashboard → logs Mongo | [entrada 005](entradas/2026-05-18.md#entrada-005--logs-del-dashboard-movidos-a-mongodb) |
+| 2026-05-10 | Presentación D10 | [entrada 001](entradas/2026-05-10.md) |
 
 ---
 
