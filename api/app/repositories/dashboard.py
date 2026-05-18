@@ -23,46 +23,23 @@ def _iso_rows(rows: list[dict]) -> list[dict]:
     return out
 
 
-def fetch_pipeline_runs(limit: int = 15) -> list[dict[str, Any]]:
+def fetch_pipeline_summary() -> dict[str, int]:
+    """Resumen compacto de pipeline (detalle de logs en MongoDB)."""
     with get_conn() as conn:
         with conn.cursor(cursor_factory=RealDictCursor) as cur:
             cur.execute(
                 """
-                SELECT run_id, job_name, stage, status,
-                       records_in, records_out, records_failed,
-                       error_message, started_at, finished_at
+                SELECT status, COUNT(*) AS count
                 FROM pipeline_runs
-                ORDER BY started_at DESC
-                LIMIT %s
-                """,
-                (limit,),
-            )
-            return _iso_rows([dict(r) for r in cur.fetchall()])
-
-
-def fetch_quality_summary(limit: int = 30) -> dict[str, Any]:
-    with get_conn() as conn:
-        with conn.cursor(cursor_factory=RealDictCursor) as cur:
-            cur.execute(
-                """
-                SELECT issue_type, COUNT(*) AS count
-                FROM data_quality_issues
-                GROUP BY issue_type
-                ORDER BY count DESC
+                GROUP BY status
                 """
             )
-            by_type = [dict(r) for r in cur.fetchall()]
-            cur.execute(
-                """
-                SELECT issue_id, issue_type, details, detected_at, study_id
-                FROM data_quality_issues
-                ORDER BY detected_at DESC
-                LIMIT %s
-                """,
-                (limit,),
-            )
-            recent = _iso_rows([dict(r) for r in cur.fetchall()])
-    return {"by_type": by_type, "recent": recent, "total": sum(t["count"] for t in by_type)}
+            rows = {str(r["status"]): int(r["count"]) for r in cur.fetchall()}
+    return {
+        "ok": rows.get("ok", 0),
+        "running": rows.get("running", 0),
+        "failed": rows.get("failed", 0),
+    }
 
 
 def fetch_recent_studies(limit: int = 24) -> list[dict[str, Any]]:
@@ -149,8 +126,7 @@ def build_dashboard_payload() -> dict[str, Any]:
     return {
         "metrics": metrics,
         "predictions_by_class": pct,
-        "pipeline_runs": fetch_pipeline_runs(),
-        "quality": fetch_quality_summary(),
+        "pipeline_summary": fetch_pipeline_summary(),
         "recent_studies": fetch_recent_studies(),
         "ml_evaluation": errors,
     }
