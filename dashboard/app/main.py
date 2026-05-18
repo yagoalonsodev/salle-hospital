@@ -10,13 +10,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
-from app.api_client import (
-    API_URL,
-    acknowledge_alert,
-    get_dashboard,
-    get_logs,
-    get_study_image,
-)
+from app.api_client import API_URL, acknowledge_alert, get_dashboard, get_study_image
 
 st.set_page_config(
     page_title="laSalle Health — Dashboard",
@@ -26,7 +20,7 @@ st.set_page_config(
 )
 
 st.title("laSalle Health Center")
-st.caption("Dashboard operativo · Día 7 — métricas IA, pipeline y alertas")
+st.caption("Dashboard operativo · métricas IA, imágenes, pipeline y alertas")
 
 
 @st.cache_data(ttl=30)
@@ -131,43 +125,11 @@ def render_images(studies: list) -> None:
 
 
 def render_pipeline_summary(summary: dict) -> None:
-    st.subheader("Estado del pipeline (resumen)")
+    st.subheader("Estado del pipeline")
     c1, c2, c3 = st.columns(3)
     c1.metric("OK", summary.get("ok", 0))
     c2.metric("En curso", summary.get("running", 0))
     c3.metric("Fallidos", summary.get("failed", 0))
-    st.caption("Detalle de líneas de log en MongoDB (pestaña Logs).")
-
-
-def render_logs() -> None:
-    st.subheader("Logs centralizados (MongoDB)")
-    col = st.selectbox(
-        "Colección",
-        ("application_logs", "airflow_logs", "file_logs"),
-        key="log_collection",
-    )
-    c1, c2, c3 = st.columns(3)
-    service = c1.text_input("Servicio (opcional)", placeholder="api, ml, watcher…")
-    level = c2.selectbox("Nivel", ("", "DEBUG", "INFO", "WARNING", "ERROR"))
-    limit = c3.number_input("Límite", min_value=10, max_value=500, value=100, step=10)
-    try:
-        payload = get_logs(
-            col,
-            service=service.strip() or None,
-            level=level or None,
-            limit=int(limit),
-        )
-    except httpx.HTTPError as exc:
-        st.error(f"No se pudieron cargar logs: {exc}")
-        return
-    items = payload.get("items") or []
-    st.caption(f"{payload.get('count', 0)} registros · colección `{col}`")
-    if not items:
-        st.info("Sin entradas para los filtros seleccionados.")
-        return
-    df = pd.DataFrame(items)
-    cols = [c for c in ("timestamp", "level", "service", "logger", "message", "path") if c in df.columns]
-    st.dataframe(df[cols] if cols else df, use_container_width=True, hide_index=True)
 
 
 def render_alerts(alerts: list) -> None:
@@ -205,8 +167,8 @@ render_health(data.get("health") or {})
 st.divider()
 render_metrics(data.get("metrics") or {})
 
-tab_ia, tab_img, tab_logs, tab_alert = st.tabs(
-    ["IA y clases", "Imágenes", "Logs", "Alertas"]
+tab_ia, tab_img, tab_pipe, tab_alert = st.tabs(
+    ["IA y clases", "Imágenes", "Pipeline", "Alertas"]
 )
 
 with tab_ia:
@@ -218,10 +180,8 @@ with tab_ia:
 with tab_img:
     render_images(data.get("recent_studies") or [])
 
-with tab_logs:
+with tab_pipe:
     render_pipeline_summary(data.get("pipeline_summary") or {})
-    st.divider()
-    render_logs()
 
 with tab_alert:
     render_alerts(data.get("alerts") or [])

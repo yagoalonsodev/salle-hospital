@@ -117,8 +117,10 @@ async function loadPatients() {
   try {
     const data = await apiPatients("GET");
     patientsCache = data.patients || [];
+    window.patientsCache = patientsCache;
     renderPatientsList();
     if (window.refreshPatientSelect) window.refreshPatientSelect(patientsCache);
+    if (window.refreshClinicalPatientSelect) window.refreshClinicalPatientSelect(patientsCache);
     if (selectedPatientId) await selectPatient(selectedPatientId);
   } catch (err) {
     $p("#patients-loading").textContent = err.message;
@@ -141,20 +143,54 @@ async function selectPatient(patientId) {
     `;
 
     const studies = p.studies || [];
+    const reports = p.clinical_reports || [];
+    $p("#detail-clinical-count").textContent = String(
+      p.clinical_report_count ?? reports.length
+    );
+
     const ul = $p("#detail-studies");
     ul.innerHTML = studies.length
       ? studies
           .map((s) => {
             const pred = s.predicted_label
-              ? ` · IA: <strong>${s.predicted_label}</strong>`
-              : " · sin predicción";
+              ? `<span class="diag-badge rx-${s.predicted_label}">${escapeHtml(s.predicted_label)}</span>`
+              : '<span class="diag-badge muted">sin predicción</span>';
             const when = s.ingested_at
               ? new Date(s.ingested_at).toLocaleString("es-ES")
               : "—";
-            return `<li><strong>${when}</strong>${pred}</li>`;
+            return `<li class="report-item">
+              <div class="report-item-head">
+                <span class="report-type">RX</span>
+                <time>${when}</time>
+              </div>
+              <p class="report-item-body">Estudio de tórax · ${pred}</p>
+            </li>`;
           })
           .join("")
-      : "<li class='hint'>Sin radiografías asociadas</li>";
+      : "<li class='hint report-empty'>Sin radiografías en el historial</li>";
+
+    const clinicalUl = $p("#detail-clinical");
+    const fmtDiag = (d) =>
+      window.formatDiagnosis ? window.formatDiagnosis(d) : String(d).replace(/_/g, " ");
+    clinicalUl.innerHTML = reports.length
+      ? reports
+          .map((r) => {
+            const when = r.inferred_at
+              ? new Date(r.inferred_at).toLocaleString("es-ES")
+              : "—";
+            const sym = escapeHtml((r.symptoms || "").slice(0, 120));
+            const pred = r.predicted_diagnosis || "—";
+            return `<li class="report-item clinical">
+              <div class="report-item-head">
+                <span class="report-type clinical">Informe</span>
+                <time>${when}</time>
+              </div>
+              <p class="report-item-symptoms">${sym}${(r.symptoms || "").length > 120 ? "…" : ""}</p>
+              <p class="report-item-body">IA: <span class="diag-badge diag-${pred}">${escapeHtml(fmtDiag(pred))}</span></p>
+            </li>`;
+          })
+          .join("")
+      : "<li class='hint report-empty'>Sin informes clínicos por síntomas</li>";
   } catch (err) {
     showFormError(err.message);
   }
@@ -189,6 +225,19 @@ $p("#patient-form")?.addEventListener("submit", async (e) => {
   } catch (err) {
     showFormError(err.message);
   }
+});
+
+$p("#btn-clinical")?.addEventListener("click", async () => {
+  if (!selectedPatientId || !window.openClinicalForPatient) return;
+  let p = patientsCache.find((x) => x.patient_id === selectedPatientId);
+  if (!p) {
+    try {
+      p = await apiPatients("GET", `/${encodeURIComponent(selectedPatientId)}`);
+    } catch {
+      return;
+    }
+  }
+  window.openClinicalForPatient(p);
 });
 
 $p("#btn-upload-rx")?.addEventListener("click", async () => {

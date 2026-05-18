@@ -40,3 +40,16 @@ def predict_bytes(raw: bytes, filename: str, content_type: str) -> dict[str, Any
 
     log.info("ML predict request file=%s size=%d", filename, len(raw))
     return retry_call(_call, attempts=3, exceptions=(httpx.HTTPError, OSError))
+
+
+def predict_clinical(*, symptoms: str, age: int, sex: str) -> dict[str, Any]:
+    payload = {"symptoms": symptoms, "age": age, "sex": sex}
+
+    def _call():
+        with httpx.Client(timeout=60.0) as client:
+            r = client.post(f"{ml_service_url()}/predict-clinical", json=payload)
+            r.raise_for_status()
+            return r.json()
+
+    log.info("ML clinical predict age=%s sex=%s len_symptoms=%d", age, sex, len(symptoms))
+    return retry_call(_call, attempts=3, exceptions=(httpx.HTTPError, OSError))

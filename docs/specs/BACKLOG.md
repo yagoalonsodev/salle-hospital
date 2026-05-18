@@ -112,6 +112,7 @@ Estructura del repo: [`estructura-repositorio.md`](../estructura-repositorio.md)
 | D4-04 | Export SavedModel estable en contenedor | Baja | `.h5` operativo |
 | D8A-01 | DAG ETL Spark ampliado | Baja | Mejora post-MVP |
 | D8A-02 | DAG inferencia batch ML | Baja | — |
+| D8A-04 | DAG reentrenamiento nocturno 01:00 | Hecho | `salle_nightly_retrain`, [ml-retrain-nightly.md](ml-retrain-nightly.md) |
 | D8A-03 | DAG informes automáticos | Baja | Dashboard cubre visualización |
 | D6-06 | Endpoint dedicado estado pipeline en API | Baja | Parcial en `/api/dashboard` |
 

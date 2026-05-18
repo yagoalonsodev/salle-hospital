@@ -4,6 +4,7 @@ from flask import Flask
 
 from app.logging_config import setup_logging
 from app.routes import (
+    clinical,
     dashboard,
     health,
     logs,
@@ -33,6 +34,7 @@ def create_app() -> Flask:
     app.register_blueprint(predict.bp)
     app.register_blueprint(upload.bp)
     app.register_blueprint(patients.bp)
+    app.register_blueprint(clinical.bp)
     app.register_blueprint(sites.bp)
     app.register_blueprint(studies.bp)
     app.register_blueprint(dashboard.bp)

@@ -19,7 +19,7 @@ docker compose up -d --build postgres minio ml api dashboard
 |---------|-----------|
 | IA y clases | % predicciones producción, matriz confusión test |
 | Imágenes | Galería estudios en MinIO |
-| Logs | Resumen `pipeline_runs` + líneas en MongoDB (`GET /api/logs`) |
+| Pipeline | Resumen de ejecuciones (`pipeline_runs` en Postgres) |
 | Alertas | Tabla `alerts`, acuse de lectura |
 
 Datos vía `GET /api/dashboard`.

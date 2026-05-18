@@ -122,6 +122,16 @@ docker compose up -d watcher airflow pipeline spark-master spark-worker
 docker exec salle-airflow airflow dags unpause salle_rx_pipeline
 ```
 
+### Reentrenamiento diario (01:00, opcional)
+
+DAG `salle_nightly_retrain`: preprocesa **todas** las RX en `raw/` (antiguas + nuevas) y reentrena ResNet50; luego reinicia `salle-ml`.
+
+```bash
+docker exec salle-airflow airflow dags unpause salle_nightly_retrain
+```
+
+Desactivar: `NIGHTLY_RETRAIN_ENABLED=false` en `.env`. Detalle: [`airflow/README.md`](airflow/README.md).
+
 ---
 
 ## Entrenamiento del modelo (offline)

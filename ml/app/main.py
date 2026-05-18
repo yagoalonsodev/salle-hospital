@@ -5,9 +5,16 @@ from __future__ import annotations
 import io
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from pydantic import BaseModel, Field
+
+from fastapi import FastAPI, File, HTTPException, Response, UploadFile
 from PIL import Image, UnidentifiedImageError
 
+from app.clinical_inference import (
+    clinical_model_status,
+    load_clinical_model,
+    predict_clinical,
+)
 from app.inference import load_model, model_status, predict_pil
 from app.logging_config import setup_logging
 
@@ -20,6 +27,7 @@ async def lifespan(app: FastAPI):
     load_model()
   except FileNotFoundError:
     pass
+  load_clinical_model()
   yield
 
 
@@ -32,14 +40,46 @@ app = FastAPI(
 
 
 @app.get("/health")
-def health():
-  status = model_status()
-  code = 200 if status["model_loaded"] else 503
+def health(response: Response):
+  rx = model_status()
+  clinical = clinical_model_status()
+  rx_ok = rx["model_loaded"]
+  clinical_ok = clinical["clinical_model_loaded"]
+  if rx_ok and clinical_ok:
+    overall = "ok"
+    response.status_code = 200
+  elif rx_ok or clinical_ok:
+    overall = "degraded"
+    response.status_code = 200
+  else:
+    overall = "degraded"
+    response.status_code = 503
   return {
-    "status": "ok" if status["model_loaded"] else "degraded",
+    "status": overall,
     "service": "ml",
-    **status,
+    **rx,
+    **clinical,
   }
+
+
+class ClinicalPredictBody(BaseModel):
+  symptoms: str = Field(..., min_length=3, max_length=4000)
+  age: int = Field(..., ge=0, le=120)
+  sex: str = Field(default="X", max_length=1)
+
+
+@app.post("/predict-clinical")
+def predict_clinical_endpoint(body: ClinicalPredictBody):
+  try:
+    return predict_clinical(
+      symptoms=body.symptoms,
+      age=body.age,
+      sex=body.sex,
+    )
+  except ValueError as exc:
+    raise HTTPException(400, str(exc)) from exc
+  except FileNotFoundError as exc:
+    raise HTTPException(503, str(exc)) from exc
 
 
 @app.post("/predict")
